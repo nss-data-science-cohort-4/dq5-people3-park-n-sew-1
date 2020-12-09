@@ -1,0 +1,116 @@
+```{r}
+library(censusapi)
+library(tidyverse)
+```
+
+
+INSPECT METADATA:
+```{r}
+apis <- listCensusApis()
+View(apis)
+```
+
+```{r}
+acs_vars <- listCensusMetadata(
+    name = "acs/acs1", 
+    type = "variables",
+    vintage=2019)
+View(acs_vars)
+```
+
+```{r}
+acs_geogs <- listCensusMetadata(
+    name = "acs/acs1", 
+    type = "geographies",
+    vintage=2019)
+View(acs_geogs)
+```
+
+```{r}
+acs_group <- listCensusMetadata(
+    name = "acs/acs1", 
+    type = "group",
+    vintage=2019)
+View(acs_group)
+```
+
+
+
+BEGIN IMPORT:
+```{r}
+#Import Race/Ethnicity for Nashville MSA
+acs_race <- getCensus(
+  key = CENSUS_KEY,  
+  name = "acs/acs1", 
+  vintage = 2019, 
+  vars = c("group(B03002)"), 
+  region = "metropolitan statistical area/micropolitan statistical area:34980")
+```
+
+```{r}
+#Import Educational Attainment for Nashville MSA
+acs_edu <- getCensus(
+  key = CENSUS_KEY,  
+  name = "acs/acs1", 
+  vintage = 2019, 
+  vars = c("group(B15002)"), 
+  region = "metropolitan statistical area/micropolitan statistical area:34980")
+```
+
+```{r}
+#Import Age for Nashville MSA
+acs_age <- getCensus(
+  key = CENSUS_KEY,  
+  name = "acs/acs1", 
+  vintage = 2019, 
+  vars = c("group(B01001)"), 
+  region = "metropolitan statistical area/micropolitan statistical area:34980")
+```
+
+
+```{r}
+View(acs_race)
+```
+
+IMPORT LABELS:
+```{r}
+race_labels <- acs_vars %>%
+  filter(group == 'B03002') %>%
+  select(c('name', 'label'))
+```
+
+```{r}
+edu_labels <- acs_vars %>%
+  filter(group == 'B15002') %>%
+  select(c('name', 'label'))
+```
+
+```{r}
+age_labels <- acs_vars %>%
+  filter(group == 'B01001') %>%
+  select(c('name', 'label'))
+```
+
+REMOVE UNNEEDED COLUMNS:
+```{r}
+acs_race <- acs_race %>%
+  select(c(ends_with('e')))
+acs_edu <- acs_edu %>%
+  select(c(ends_with('e')))
+acs_age <- acs_age %>%
+  select(c(ends_with('e')))
+```
+
+CLEAN LABELS:
+```{r}
+race_labels
+```
+
+
+
+
+
+
+
+
+
