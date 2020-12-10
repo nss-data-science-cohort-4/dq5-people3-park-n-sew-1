@@ -67,11 +67,6 @@ acs_age <- getCensus(
   region = "metropolitan statistical area/micropolitan statistical area:34980")
 ```
 
-
-```{r}
-View(acs_race)
-```
-
 IMPORT LABELS:
 ```{r}
 race_labels <- acs_vars %>%
@@ -103,8 +98,53 @@ acs_age <- acs_age %>%
 
 CLEAN LABELS:
 ```{r}
-race_labels
+race_labels <- race_labels %>% mutate(label = str_replace_all(string = label, pattern = 'Estimate!!Total:!!', replacement = ''))
+edu_labels <- edu_labels %>% mutate(label = str_replace_all(string = label, pattern = 'Estimate!!Total:!!', replacement = ''))
+age_labels <- age_labels %>% mutate(label = str_replace_all(string = label, pattern = 'Estimate!!Total:!!', replacement = ''))
+race_labels <- race_labels %>% mutate(label = str_replace_all(string = label, pattern = '!!', replacement = ''))
+edu_labels <- edu_labels %>% mutate(label = str_replace_all(string = label, pattern = '!!', replacement = ''))
+age_labels <- age_labels %>% mutate(label = str_replace_all(string = label, pattern = '!!', replacement = ''))
 ```
+
+REARRANGE LABELS:
+```{r}
+race_labels <- arrange(race_labels, name)
+edu_labels <- arrange(edu_labels, name)
+age_labels <- arrange(age_labels, name)
+```
+
+CREATING LOOKUP VECTOR:
+```{r}
+lookup_vector_race <- race_labels$label
+lookup_vector_race <- append(lookup_vector_race, "Location")
+lookup_vector_edu <- edu_labels$label
+lookup_vector_edu <- append(lookup_vector_edu, "Location")
+lookup_vector_age <- age_labels$label
+lookup_vector_age <- append(lookup_vector_age, "Location")
+```
+
+REPLACING LABELS:
+```{r}
+rownames(race_labels) <- NULL
+rownames(edu_labels) <- NULL
+rownames(age_labels) <- NULL
+```
+
+```{r}
+colnames(acs_race) <- lookup_vector_race
+colnames(acs_edu) <- lookup_vector_edu
+colnames(acs_age) <- lookup_vector_age
+```
+
+VIEW DATAFRAMES
+```{r}
+View(acs_age)
+View(acs_edu)
+View(acs_race)
+```
+
+
+
 
 
 
