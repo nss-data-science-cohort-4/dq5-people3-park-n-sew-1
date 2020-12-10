@@ -1,0 +1,168 @@
+---
+title: "Importing_and_Cleaning"
+output: html_document
+---
+
+
+```{r}
+library(censusapi)
+library(tidyverse)
+library(dplyr)
+library(stringr)
+```
+
+
+
+```{r}
+```
+
+
+INSPECT METADATA:
+```{r}
+apis <- listCensusApis()
+View(apis)
+```
+
+
+
+```{r}
+acs_vars <- listCensusMetadata(
+    name = "acs/acs1", 
+    type = "variables",
+    vintage=2019)
+View(acs_vars)
+```
+
+```{r}
+acs_geogs <- listCensusMetadata(
+    name = "acs/acs1", 
+    type = "geographies",
+    vintage=2019)
+View(acs_geogs)
+```
+
+```{r}
+acs_group <- listCensusMetadata(
+    name = "acs/acs1", 
+    type = "group",
+    vintage=2019)
+View(acs_group)
+```
+
+
+
+BEGIN IMPORT:
+```{r}
+#Import Race/Ethnicity for Nashville MSA
+acs_race <- getCensus(
+  key = CENSUS_KEY,  
+  name = "acs/acs1", 
+  vintage = 2019, 
+  vars = c("group(B03002)"), 
+  region = "metropolitan statistical area/micropolitan statistical area:34980")
+```
+
+```{r}
+#Import Educational Attainment for Nashville MSA
+acs_edu <- getCensus(
+  key = CENSUS_KEY,  
+  name = "acs/acs1", 
+  vintage = 2019, 
+  vars = c("group(B15002)"), 
+  region = "metropolitan statistical area/micropolitan statistical area:34980")
+```
+
+```{r}
+#Import Age for Nashville MSA
+acs_age <- getCensus(
+  key = CENSUS_KEY,  
+  name = "acs/acs1", 
+  vintage = 2019, 
+  vars = c("group(B01001)"), 
+  region = "metropolitan statistical area/micropolitan statistical area:34980")
+```
+
+
+```{r}
+View(acs_race)
+```
+
+IMPORT LABELS:
+```{r}
+race_labels <- acs_vars %>%
+  filter(group == 'B03002') %>%
+  select(c('name', 'label'))
+```
+
+```{r}
+edu_labels <- acs_vars %>%
+  filter(group == 'B15002') %>%
+  select(c('name', 'label'))
+```
+
+```{r}
+age_labels <- acs_vars %>%
+  filter(group == 'B01001') %>%
+  select(c('name', 'label'))
+```
+
+
+REMOVE UNNEEDED COLUMNS:
+```{r}
+acs_race <- acs_race %>%
+  select(c(ends_with('e')))
+acs_edu <- acs_edu %>%
+  select(c(ends_with('e')))
+acs_age <- acs_age %>%
+  select(c(ends_with('e')))
+```
+
+CLEAN LABELS:
+```{r}
+
+race_labels <- race_labels %>% mutate(label = str_replace_all(string = label, pattern = 'Estimate!!Total:!!', replacement = ''))
+edu_labels <- edu_labels %>% mutate(label = str_replace_all(string = label, pattern = 'Estimate!!Total:!!', replacement = ''))
+age_labels <- age_labels %>% mutate(label = str_replace_all(string = label, pattern = 'Estimate!!Total:!!', replacement = ''))
+
+view(race_labels)
+view(edu_labels)
+view(age_labels)
+```
+
+CREATING LOOKUP VECTORS TO USE IN REPLACING LABELS:lookup_vector_race <- append(lookup_vector_race, 'Location')
+```{r}
+lookup_vector_race <- race_labels$label
+names(lookup_vector_race) <- race_labels$name
+
+lookup_vector_edu <- edu_labels$label
+names(lookup_vector_edu) <- edu_labels$name
+
+lookup_vector_age <- age_labels$label
+names(lookup_vector_age) <- age_labels$name
+```
+
+```{r}
+lookup_vector_race
+```
+
+REPLACING LABELS:
+```{r}
+length(acs_race)
+length(lookup_vector_race)
+```
+```{r}
+view(lookup_vector_race)
+```
+
+
+```{r}
+race_labels <- arrange(race_labels, name)
+rownames(race_labels) <- NULL
+view(race_labels)
+names(race_labels) <- lookup_vector_race['x']
+```
+```{r}
+view(acs_race)
+```
+
+
