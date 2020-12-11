@@ -138,19 +138,82 @@ colnames(acs_age) <- lookup_vector_age
 
 VIEW DATAFRAMES
 ```{r}
-View(acs_age)
+#View(acs_age)
 View(acs_edu)
-View(acs_race)
+#View(acs_race)
 ```
 
+MATH OUT THE COLUMNS TO GET CORRECT CATEGORIES, THEN REARRANGE ROWS.
+```{r}
+colnames(acs_age)
+```
 
+SUBSET TO MALE AND FEMALE, PREPARE TO CONCATENATE
+```{r}
+age_female <- acs_age %>%
+  select(c(contains('Female')))
+names(age_female) = sub('Female', 'Total', names(age_female))
+age_female$gender = 'Female' 
+age_male <- acs_age %>%
+  select(-c('EstimateTotal:', 'Location', contains('Female')))
+age_male$gender = 'Male'
+names(age_male) = sub('Male', 'Total', names(age_male))
+```
 
+CONCATENATE MALE AND FEMALE
+```{r}
+age_df <- rbind(age_male, age_female)
+```
 
+SUM ROWS TO CORRECT CATEGORIES, REMOVE UNNEEDED ROWS:
+```{r}
+age_rows <- c('Male', 'Female')
+age_df <- age_df %>%
+  mutate(
+    age_under_20_years = rowSums(age_df[, c(2:6)]),
+    age_20_29_years = rowSums(age_df[, c(7:10)]), 
+    age_30_39_years = rowSums(age_df[, c(11:12)]),
+    age_40_49_years = rowSums(age_df[, c(13:14)]),
+    age_50_59_years = rowSums(age_df[, c(15:16)]),
+    age_60_years_and_over = rowSums(age_df[, c(17:24)]),
+    ) %>%
+  select(-c(2:24))
+row.names(age_df) <- age_rows
+```
 
+```{r}
+age_df <- age_df %>%
+  select(-gender) 
+```
 
+CREATE A ROW FOR TOTALS, CONCATENATE TO AGE_DF
+```{r}
+Total <- data.frame(colSums(age_df[,]))
+```
 
+```{r}
+Total <- data.frame(t(Total))
+```
 
+```{r}
+colnames(Total) <- colnames(age_df)
+age_df <- rbind(age_df, Total)
+```
 
+RENAME AND REORDER ROWS
+```{r}
+age_df$order <- c(2,3,1)
+age_df <- age_df %>% 
+  arrange(order) %>%
+  select(-order)
+rownames(age_df) <- c('Total', 'Male', 'Female')
+```
+
+```{r}
+#View(age_female)
+#View(age_male)
+#View(age_df)
+```
 
 
 
