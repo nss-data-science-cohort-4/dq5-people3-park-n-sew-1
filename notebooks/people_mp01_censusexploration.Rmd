@@ -7,7 +7,7 @@ library(tidyverse)
 INSPECT METADATA:
 ```{r}
 apis <- listCensusApis()
-View(apis)
+#View(apis)
 ```
 
 ```{r}
@@ -15,7 +15,7 @@ acs_vars <- listCensusMetadata(
     name = "acs/acs1", 
     type = "variables",
     vintage=2019)
-View(acs_vars)
+#View(acs_vars)
 ```
 
 ```{r}
@@ -23,7 +23,7 @@ acs_geogs <- listCensusMetadata(
     name = "acs/acs1", 
     type = "geographies",
     vintage=2019)
-View(acs_geogs)
+#View(acs_geogs)
 ```
 
 ```{r}
@@ -31,7 +31,7 @@ acs_group <- listCensusMetadata(
     name = "acs/acs1", 
     type = "group",
     vintage=2019)
-View(acs_group)
+#View(acs_group)
 ```
 
 
@@ -106,7 +106,7 @@ edu_labels <- edu_labels %>% mutate(label = str_replace_all(string = label, patt
 age_labels <- age_labels %>% mutate(label = str_replace_all(string = label, pattern = '!!', replacement = ''))
 ```
 
-REARRANGE LABELS:
+REARRANGE LABELS TO MATCH CENSUS IMPORT ORDER:
 ```{r}
 race_labels <- arrange(race_labels, name)
 edu_labels <- arrange(edu_labels, name)
@@ -139,21 +139,27 @@ colnames(acs_age) <- lookup_vector_age
 VIEW DATAFRAMES
 ```{r}
 #View(acs_age)
-View(acs_edu)
+#View(acs_edu)
 #View(acs_race)
 ```
 
-MATH OUT THE COLUMNS TO GET CORRECT CATEGORIES, THEN REARRANGE ROWS.
+MATH OUT THE COLUMNS TO GET CORRECT CATEGORIES, THEN CLEAN TO GET FINAL DATAFRAMES
+START WITH AGE DATA
 ```{r}
-colnames(acs_age)
+#colnames(acs_age)
 ```
 
 SUBSET TO MALE AND FEMALE, PREPARE TO CONCATENATE
 ```{r}
+#Pull out columns with Female Data
 age_female <- acs_age %>%
   select(c(contains('Female')))
+#Rename to column names that will match names for Male Data
 names(age_female) = sub('Female', 'Total', names(age_female))
+#Add row column to mark gender, for reference. Will delete later.
 age_female$gender = 'Female' 
+
+#Follow same process, but for Male Data
 age_male <- acs_age %>%
   select(-c('EstimateTotal:', 'Location', contains('Female')))
 age_male$gender = 'Male'
@@ -168,6 +174,7 @@ age_df <- rbind(age_male, age_female)
 SUM ROWS TO CORRECT CATEGORIES, REMOVE UNNEEDED ROWS:
 ```{r}
 age_rows <- c('Male', 'Female')
+#Add columns to match sample corporation data, then remove original columns
 age_df <- age_df %>%
   mutate(
     age_under_20_years = rowSums(age_df[, c(2:6)]),
@@ -188,16 +195,16 @@ age_df <- age_df %>%
 
 CREATE A ROW FOR TOTALS, CONCATENATE TO AGE_DF
 ```{r}
-Total <- data.frame(colSums(age_df[,]))
+Total_age <- data.frame(colSums(age_df[,]))
 ```
 
 ```{r}
-Total <- data.frame(t(Total))
+Total_age <- data.frame(t(Total_age))
 ```
 
 ```{r}
-colnames(Total) <- colnames(age_df)
-age_df <- rbind(age_df, Total)
+colnames(Total_age) <- colnames(age_df)
+age_df <- rbind(age_df, Total_age)
 ```
 
 RENAME AND REORDER ROWS
@@ -213,6 +220,151 @@ rownames(age_df) <- c('Total', 'Male', 'Female')
 #View(age_female)
 #View(age_male)
 #View(age_df)
+```
+
+MATH OUT THE COLUMNS TO GET CORRECT CATEGORIES, THEN CLEAN TO GET FINAL DATAFRAMES
+CONTINUE WITH EDUCATION DATA
+
+SUBSET TO MALE AND FEMALE, PREPARE TO CONCATENATE
+```{r}
+#Follow same steps as above, with age data
+edu_female <- acs_edu %>%
+  select(c(contains('Female')))
+names(edu_female) = sub('Female', 'Total', names(edu_female))
+edu_female$gender = 'Female'
+edu_male <- acs_edu %>%
+  select(-c('EstimateTotal:', 'Location', contains('Female')))
+edu_male$gender = 'Male'
+names(edu_male) = sub('Male', 'Total', names(edu_male))
+```
+
+CONCATENATE MALE AND FEMALE
+```{r}
+edu_df <- rbind(edu_male, edu_female)
+```
+
+SUM ROWS TO CORRECT CATEGORIES, REMOVE UNNEEDED ROWS:
+```{r}
+edu_rows <- c('Male', 'Female')
+edu_df <- edu_df %>%
+  mutate(
+    no_high_school_diploma = rowSums(edu_df[, c(2:9)]),
+    high_school_graduate = edu_df[10], 
+    some_college_no_degree = rowSums(edu_df[, c(11:12)]),
+    associates_degree = edu_df[13], 
+    bachelors_degree = edu_df[14], 
+    masters_degree = edu_df[15], 
+    professional_degree_school = edu_df[16],
+    doctorate_degree = edu_df[17]
+    ) %>%
+  select(-c(2:17))
+row.names(edu_df) <- edu_rows
+```
+
+
+```{r}
+edu_df <- edu_df %>%
+  select(-gender) 
+```
+
+CREATE A ROW FOR TOTALS, CONCATENATE TO AGE_DF
+```{r}
+Total_edu <- data.frame(colSums(edu_df[,]))
+```
+
+```{r}
+Total_edu <- data.frame(t(Total_edu))
+```
+
+```{r}
+colnames(Total_edu) <- colnames(edu_df)
+edu_df <- rbind(edu_df, Total_edu)
+```
+
+RENAME AND REORDER ROWS
+```{r}
+edu_df$order <- c(2,3,1)
+edu_df <- edu_df %>% 
+  arrange(order) %>%
+  select(-order)
+rownames(edu_df) <- c('Total', 'Male', 'Female')
+```
+
+```{r}
+#View(edu_female)
+#View(edu_male)
+#View(edu_df)
+#View(acs_edu)
+```
+
+
+CONTINUE CLEANING WITH RACE DATA SET
+
+SUBSET TO NOT HISP/LAT VS HISP/LAT, PREPARE TO CONCATENATE
+```{r}
+#Follow same steps as above, but now splitting data between Hispanic/Latino and Non
+race_not <- acs_race %>%
+  select(c(contains('Not')))
+names(race_not) = sub('Not Hispanic or Latino:', '', names(race_not))
+race_not$race = 'Not Hispanic or Latino' 
+race_hisp <- acs_race %>%
+  select(-c('EstimateTotal:', 'Location', contains('Not')))
+race_hisp$race = 'Hispanic or Latino'
+names(race_hisp) = sub('Hispanic or Latino:', '', names(race_hisp))
+```
+
+```{r}
+#renaming first column to total
+colnames(race_not)[colnames(race_not) == ''] <- 'Total'
+colnames(race_hisp)[colnames(race_hisp) == ''] <- 'Total'
+```
+
+CONCATENATE MALE AND FEMALE
+```{r}
+race_df <- rbind(race_not, race_hisp)
+```
+
+```{r}
+#View(race_df)
+```
+
+Renaming Index:
+```{r}
+race_rows <- c('Not Hispanic or Latino', 'Hispanic or Latino')
+row.names(race_df) <- race_rows
+```
+
+GETTING RID OF RACE COLUMN:
+```{r}
+race_df <- race_df %>%
+  select(-race) 
+```
+
+CREATE A ROW FOR TOTALS, CONCATENATE TO AGE_DF
+```{r}
+Total_race <- data.frame(colSums(race_df[,]))
+```
+
+```{r}
+Total_race <- data.frame(t(Total_race))
+```
+
+```{r}
+colnames(Total_race) <- colnames(race_df)
+race_df <- rbind(race_df, Total_race)
+```
+
+RENAME AND REORDER ROWS
+```{r}
+race_df$order <- c(2,3,1)
+race_df <- race_df %>% 
+  arrange(order) %>%
+  select(-order)
+rownames(race_df) <- c('Total', 'Not Hispanic or Latino', 'Hispanic or Latino')
+```
+
+```{r}
+census_df <- list(age_df, race_df, edu_df)
 ```
 
 
