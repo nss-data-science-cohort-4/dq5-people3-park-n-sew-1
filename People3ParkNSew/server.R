@@ -1,26 +1,28 @@
-#
-# This is the server logic of a Shiny web application. You can run the
-# application by clicking 'Run App' above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    http://shiny.rstudio.com/
-#
-
-library(shiny)
-
-# Define server logic required to draw a histogram
-shinyServer(function(input, output) {
-
-    output$distPlot <- renderPlot({
-
-        # generate bins based on input$bins from ui.R
-        x    <- faithful[, 2]
-        bins <- seq(min(x), max(x), length.out = input$bins + 1)
-
-        # draw the histogram with the specified number of bins
-        hist(x, breaks = bins, col = 'darkgray', border = 'white')
-
+shinyServer(function(input, output, session) {
+    
+    
+    # for display of mtcars dataset in the "Data Page"
+    output$data <- renderTable({
+        mtcars
     })
-
+    
+    
+    
+    # Matt's Output for his Page
+    output$plot <- renderPlot({
+        hist(mtcars$mpg, col ="lightblue1", breaks=input$matt_slider )
+    })
+    
+    
+    #Savannah's Output for her Page
+    output$plot2 <- renderPlot({
+        hist(mtcars$mpg, col ="lightblue1", breaks=input$sav_slider )
+    })
+    
+    
+    # for display of mtcars dataset summary statistics in the "Menu item A page"
+    output$summary <- renderPrint({
+        summary(mtcars)
+    })
+    
 })
