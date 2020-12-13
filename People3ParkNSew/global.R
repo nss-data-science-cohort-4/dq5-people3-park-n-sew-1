@@ -10,6 +10,11 @@ age_df <- data.frame(census_df_list[1])
 race_df <- data.frame(census_df_list[2])
 edu_df <- data.frame(census_df_list[3])
 
+#Transposing Dataframes
+age_df <- t(age_df)[-1,]
+race_df <- t(race_df)[-1,]
+edu_df <- t(edu_df)[-1,]
+
 #View(age_df)
 #View(race_df)
 #View(edu_df)

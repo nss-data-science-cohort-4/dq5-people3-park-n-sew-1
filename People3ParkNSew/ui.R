@@ -25,7 +25,9 @@ shinyUI(navbarPage(title = "People 3 Title Here",
                                     )
                                 ),
                                 mainPanel(
-                                  tableOutput("user_data_output")
+                                  tableOutput("user_age"),
+                                  tableOutput("user_race"),
+                                  tableOutput("user_edu")
                                 )
                             )
                    ),
@@ -38,6 +40,7 @@ shinyUI(navbarPage(title = "People 3 Title Here",
                                 ),
                                 mainPanel(
                                     plotOutput("plot2")
+                                    
                                 )
                             )
                    ),
