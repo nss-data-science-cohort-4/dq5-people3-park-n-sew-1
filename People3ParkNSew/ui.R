@@ -25,7 +25,9 @@ shinyUI(navbarPage(title = "People 3 Title Here",
                                     )
                                 ),
                                 mainPanel(
-                                  tableOutput("user_data_output")
+                                  tableOutput("user_age"),
+                                  tableOutput("user_race"),
+                                  tableOutput("user_edu")
                                 )
                             )
                    ),
@@ -38,7 +40,44 @@ shinyUI(navbarPage(title = "People 3 Title Here",
                                 ),
                                 mainPanel(
                                     plotOutput("plot2")
+                                    
                                 )
+                            )
+                   ),
+                   
+                   tabPanel("Race",
+                            sidebarLayout(
+                              sidebarPanel(
+                                h2("Sidebar")
+                              ),
+                              mainPanel(
+                                h2("Main Panel")
+                                
+                              )
+                            )
+                   ),
+                   
+                   tabPanel("Education",
+                            sidebarLayout(
+                              sidebarPanel(
+                                h2("Sidebar")
+                              ),
+                              mainPanel(
+                                h2("Main Panel")
+                                
+                              )
+                            )
+                   ),
+                   
+                   tabPanel("Age",
+                            sidebarLayout(
+                              sidebarPanel(
+                                h2("Sidebar")
+                              ),
+                              mainPanel(
+                                h2("Main Panel")
+                                
+                              )
                             )
                    ),
                    
