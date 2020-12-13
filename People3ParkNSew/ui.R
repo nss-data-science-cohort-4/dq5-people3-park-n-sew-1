@@ -33,7 +33,15 @@ shinyUI(navbarPage(title = "People 3 Title Here",
                                     sliderInput("sav_slider", "Select no. of BINs", min = 5, max = 20,value = 10)
                                 ),
                                 mainPanel(
-                                    plotOutput("plot2")
+                                    plotOutput("plot2"),
+                                    
+                                    t(age_df)
+                                    #Trying Bar Chart for Age
+                                    #p<-ggplot(data=age_df, aes(x=Total, y=Total)) +
+                                        #geom_bar(stat="Total")
+                                   # p
+                                    
+                                    
                                 )
                             )
                    ),
