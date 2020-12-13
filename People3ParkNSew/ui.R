@@ -18,10 +18,14 @@ shinyUI(navbarPage(title = "People 3 Title Here",
                    tabPanel("Matt's Tab",
                             sidebarLayout(
                                 sidebarPanel(
-                                    sliderInput("matt_slider", "Select no. of BINs", min = 5, max = 20,value = 10)
+                                    fileInput("user_file", 
+                                              #NEED ACTION OR TEXT TO EXPLAIN HOW
+                                              "Upload your File",
+                                              accept = c(".xls", ".xlsx")
+                                    )
                                 ),
                                 mainPanel(
-                                    plotOutput("plot")
+                                  tableOutput("user_data_output")
                                 )
                             )
                    ),

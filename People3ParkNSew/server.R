@@ -9,8 +9,23 @@ shinyServer(function(input, output, session) {
     
     
     # Matt's Output for his Page
-    output$plot <- renderPlot({
-        hist(mtcars$mpg, col ="lightblue1", breaks=input$matt_slider )
+    output$user_data_output <- renderTable({
+        # input$file1 will be NULL initially. After the user selects
+        # and uploads a file, it will be a data frame with 'name',
+        # 'size', 'type', and 'datapath' columns. The 'datapath'
+        # column will contain the local filenames where the data can
+        # be found.
+        user_data <- input$user_file
+        
+        if (is.null(user_data))
+            return(NULL)
+        
+        user_age <- read_excel_allsheets(user_data$datapath)[1]
+        user_race <- read_excel_allsheets(user_data$datapath)[2]
+        user_edu <- read_excel_allsheets(user_data$datapath)[3]
+        #user_age
+        #user_race
+        #user_edu
     })
     
     
