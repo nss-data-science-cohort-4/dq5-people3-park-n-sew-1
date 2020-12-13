@@ -45,6 +45,42 @@ shinyUI(navbarPage(title = "People 3 Title Here",
                             )
                    ),
                    
+                   tabPanel("Race",
+                            sidebarLayout(
+                              sidebarPanel(
+                                h2("Sidebar")
+                              ),
+                              mainPanel(
+                                h2("Main Panel")
+                                
+                              )
+                            )
+                   ),
+                   
+                   tabPanel("Education",
+                            sidebarLayout(
+                              sidebarPanel(
+                                h2("Sidebar")
+                              ),
+                              mainPanel(
+                                h2("Main Panel")
+                                
+                              )
+                            )
+                   ),
+                   
+                   tabPanel("Age",
+                            sidebarLayout(
+                              sidebarPanel(
+                                h2("Sidebar")
+                              ),
+                              mainPanel(
+                                h2("Main Panel")
+                                
+                              )
+                            )
+                   ),
+                   
                    ##Saving this incase you want to use a dropdown
                    ## Use navbarmenu to get the tab with menu capabilities
                    navbarMenu("Menu Options",
