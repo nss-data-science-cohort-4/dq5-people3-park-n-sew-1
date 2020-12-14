@@ -25,7 +25,8 @@ shinyUI(navbarPage(title = "People 3 Title Here",
                                     )
                                 ),
                                 mainPanel(
-                                  tableOutput("user_age"),
+                                  plotOutput("user_age"),
+                                  #We will eventually convert these to other Outputs.
                                   tableOutput("user_race"),
                                   tableOutput("user_edu")
                                 )
