@@ -39,7 +39,7 @@ shinyUI(navbarPage(title = "People 3 Title Here",
                                     sliderInput("sav_slider", "Select no. of BINs", min = 5, max = 20,value = 10)
                                 ),
                                 mainPanel(
-                                    plotOutput("plot2")
+                                  h2('testing')
                                     
                                 )
                             )
@@ -75,10 +75,14 @@ shinyUI(navbarPage(title = "People 3 Title Here",
                                 h2("Sidebar")
                               ),
                               mainPanel(
-                                h2("Main Panel")
-                                
+                                tabsetPanel(type = "tabs",
+                                            tabPanel("Total", plotOutput("age_total_plot"), plotOutput("user_age_total")),
+                                            tabPanel("Male", plotOutput("age_male_plot"), plotOutput("user_age_male")),
+                                            tabPanel("Female", plotOutput("age_female_plot"), plotOutput("user_age_female"))
+                                )
                               )
                             )
+                            
                    ),
                    
                    ##Saving this incase you want to use a dropdown
