@@ -29,16 +29,17 @@ shinyServer(function(input, output, session) {
     
     #Testing Reactive Element
     rval_age <- reactive({ 
-        #MAY DELETE: req(input$user_file) ## ?req #  require that the input is available
+        req(input$user_file) ## ?req #  require that the input is available
         
         #Read in a dataframe of age data on users's upload.
         #This uses a function to read file as a list of dataframes.
-        user_age_df <- data.frame(read_excel_allsheets(input$user_file$datapath)[1]) #%>%
-            t()
+        user_age_df <- t(data.frame(read_excel_allsheets(input$user_file$datapath)[1]))
+        colnames(user_age_df) <- as.character(user_age_df[1, ])
+        user_age_df <- data.frame(user_age_df[-1,])
         
         return(user_age_df)
     })
-    
+
     #output$contents <- renderTable({
     #    data()
    # })
@@ -75,13 +76,13 @@ shinyServer(function(input, output, session) {
     #Savannah testing trying to make 3 outputs 1 for each data frame    
     #Use reactive dataframe to create plots.
     output$user_age <- renderPlot({
-        rval_age %>%
-        ggplot(aes(x=colnames(), y=Total)) + geom_bar()
+        rval_age() %>%
+        ggplot(aes(x=rownames(), y=value)) + geom_bar()
         
-        if (is.null(user_data1))
-            {return(NULL)}
-        else
-            {return(user_data1)}
+      #  if (is.null(user_age))
+      #      {return(NULL)}
+      #  else
+       #     {return(user_age)}
     })
     
     output$user_race<- renderTable({
