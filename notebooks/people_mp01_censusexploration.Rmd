@@ -368,7 +368,7 @@ census_df <- list(age_df, race_df, edu_df)
 ```
 
 ```{r}
-#saveRDS(census_df, 'census_df.rmd')
+#saveRDS(census_df, 'census_df.rds')
 ```
 `
 
