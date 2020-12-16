@@ -73,8 +73,8 @@ shinyUI(navbarPage(title = "People 3 Title Here",
                                 h2("Sidebar")
                               ),
                               mainPanel(
-                                h2("Main Panel")
-                                
+                                h2("Main Panel"),
+                                plotOutput("user_edu_male")
                               )
                             )
                    ),
