@@ -239,15 +239,25 @@ SUM ROWS TO CORRECT CATEGORIES, REMOVE UNNEEDED ROWS:
 edu_df <- edu_df %>%
   mutate(
     no_high_school_diploma = rowSums(edu_df[, c(2:9)]),
-    high_school_graduate = edu_df[10], 
+    #high_school_graduate = edu_df[10], 
     some_college_no_degree = rowSums(edu_df[, c(11:12)]),
-    associates_degree = edu_df[13], 
-    bachelors_degree = edu_df[14], 
-    masters_degree = edu_df[15], 
-    professional_degree_school = edu_df[16],
-    doctorate_degree = edu_df[17]
+    #associates_degree = edu_df[13], 
+    #bachelors_degree = edu_df[14], 
+    #masters_degree = edu_df[15], 
+    #professional_degree = edu_df[16],
+    #doctorate_degree = edu_df[17]
     ) %>%
-  select(-c(2:17))
+  select(-c(2:9, 11:12))
+edu_df <- edu_df[c(1,8,2,9,3,4,5,6,7)]
+colnames(edu_df) <- c('total',
+                      'no_high_school_diploma',
+                      'high_school_graduate',
+                      'some_college_no_degree',
+                      'associates_degree',
+                      'bachelors_degree',
+                      'masters_degree',
+                      'professional_degree',
+                      'doctorate_degree')
 ```
 
 
@@ -329,16 +339,28 @@ race_df$order <- c(2,3,1)
 race_df <- race_df %>% 
   arrange(order) %>%
   select(-order)
-race_df$ethnicity <- c('Total', 'Not Hispanic or Latino', 'Hispanic or Latino')
+race_df$ethnicity <- c('Total', 'Not_Hispanic_or_Latino', 'Hispanic_or_Latino')
 race_df <- race_df[c(11,1,2,3,4,5,6,7,8,9,10)]
-rownames(race_df) <- c('Total', 'Not Hispanic or Latino', 'Hispanic or Latino')
+rownames(race_df) <- c('Total', 'Not_Hispanic_or_Latino', 'Hispanic_or_Latino')
+colnames(race_df) <- c('ethnicity',
+                       'total',
+                       'white',
+                       'black_or_african_american',
+                       'american_indian_or_alaska_native',
+                       'asian',
+                       'native_hawaiian_or_pacific_islander',
+                       'other_race',
+                       'two_or_more_races',
+                       'two_or_more_races_including_other',
+                       'two_or_more_races_excluding_other_and_three_or_more')
 ```
+
 
 ```{r}
 #View(race_female)
 #View(race_male)
 #View(race_df)
-#View(race_edu)
+#View(acs_race)
 ```
 
 ```{r}
@@ -346,9 +368,9 @@ census_df <- list(age_df, race_df, edu_df)
 ```
 
 ```{r}
-saveRDS(census_df, 'census_df.rmd')
+#saveRDS(census_df, 'census_df.rmd')
 ```
-
+`
 
 
 
