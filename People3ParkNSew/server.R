@@ -26,6 +26,60 @@ shinyServer(function(input, output, session) {
         #user_race
         #user_edu
     
+    #Nashville Age Pie Chart
+    output$nash_age_pie <- renderPlot({
+        pie_data <- data.frame(
+            group=c('Male','Female'),
+            value=c(age_df[2,2],age_df[3,2])
+        )
+        
+        pie_data <- pie_data %>% 
+            arrange(desc(group)) %>%
+            mutate(prop = value / sum(pie_data$value) *100) %>%
+            mutate(ypos = cumsum(prop)- 0.5*prop)
+                   
+        #View(pie_data)
+        
+        ggplot(pie_data, aes(x="", y=value, fill=group)) +
+            geom_bar(stat="identity", width=1) +
+            coord_polar("y", start=0) +
+            theme_void() +
+            labs(title = "Percent Male and Female in Nashville")
+            #theme(legend.position = "none") +
+            #geom_text(aes(label = prop), color = "white", size=6)
+    })
+    
+    
+    
+    #Company Age Pie Chart
+    output$company_age_pie <- renderPlot({
+        user_data1 <- read_excel_allsheets(input$user_file$datapath)[1]
+        user_data1 <- data.frame(user_data1)
+        
+        pie_data <- data.frame(
+            group=c('Male','Female'),
+            value=c(user_data1[2,2],user_data1[3,2])
+        )
+        
+        pie_data <- pie_data %>% 
+            arrange(desc(group)) %>%
+            mutate(prop = value / sum(pie_data$value) *100) %>%
+            mutate(ypos = cumsum(prop)- 0.5*prop)
+        
+        View(pie_data)
+        
+        ggplot(pie_data, aes(x="", y=value, fill=group)) +
+            geom_bar(stat="identity", width=1) +
+            coord_polar("y", start=0) +
+            theme_void() +
+            labs(title = "Percent Male and Female in Your Company")
+        #theme(legend.position = "none") +
+        #geom_text(aes(label = prop), color = "white", size=6)
+    })
+    
+    
+    
+    #nashville df bar charts for age
     output$age_total_plot <- renderPlot({
         ggplot(data = Datalong_age[1:6,]) + 
             geom_col(aes(x = age_group, y = value)) +
