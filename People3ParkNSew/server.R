@@ -36,7 +36,13 @@ shinyServer(function(input, output, session) {
         {return(user_data3)}
     }) 
     
-    
+    output$downloadData <- downloadHandler(
+      filename = 'User_Company_Template.xlsx',
+      content = function(file) {
+        file.copy(from = 'Example_Profile_Download.xlsx', to = file)
+        #command = paste('cp duck.jpg', file)
+        #system(command)
+      })
     
     
     

@@ -8,7 +8,7 @@
 # use position="fixed-top" - bar is fixed but page is scrollable
 # use collapsible = T if the app is used on tab where resolution is less. It will appear as collapsible menu
 # Important note that a navbarmenu cannot be the first tab/page
-shinyUI(navbarPage(title = "People 3 Title Here", 
+shinyUI(navbarPage(title = "People 3 Demo App", 
                    
                    # ********** ABOUT TAB **********
                    tabPanel("About Page", 
@@ -23,7 +23,15 @@ shinyUI(navbarPage(title = "People 3 Title Here",
                                               #NEED ACTION OR TEXT TO EXPLAIN HOW
                                               "Upload your File",
                                               accept = c(".xls", ".xlsx")
-                                              )
+                                              ),
+                                    h4('How to Input Your Data:'),
+                                    h5('1. Click the button below and download the excel template.'),
+                                    h5('2. Fill in the three excel sheets with your 
+                                       companies data (the totals should self-calculate.)'),
+                                    h5('3. Save the filled in template to your computer.'),
+                                    h5('4. Using the `Browse...` button above upload the file.'),
+                                    h5('5. You are ready to start using our web app!'),
+                                    downloadButton("downloadData", "Download Template")
                                 ),
                                 mainPanel(
                                   tableOutput("user_age"),
