@@ -32,7 +32,7 @@ Datalong_age$age_group <- factor(Datalong_age$age_group,levels = c("age_under_20
 
 #View(age_df)
 #View(race_df)
-#View(edu_df)
+View(edu_df)
 
 read_excel_allsheets <- function(filename, tibble = FALSE) {
   sheets <- readxl::excel_sheets(filename)
