@@ -269,34 +269,202 @@ shinyServer(function(input, output, session) {
     
     #******** EDUCATION TAB ***********
     
-    #I WILL WORK HERE 
-    output$user_edu_male<- renderPlot({
-        #making data frame
-        user_data3 <- read_excel_allsheets(input$user_file$datapath)[3]
-        user_data3 <- data.frame(user_data3)
-        View(user_data3)
-        #pivot longer
-        user_data3 <- pivot_longer(user_data3, cols = Education.No.High.School.Diploma:Education.Doctorate.degree, names_to = "edu_group")
-        
-        #setting factors so bar chart in right order
-       # user_data3$edu_group <- factor(user_data3$edu_group,levels = c("no_high_school_diploma", 
-                                                                       #  "high_school_graduate",
-                                                                        # "some_college_no_degree",
-                                                                      #   "associates_degree", 
-                                                                       #  "bachelors_degree",
-                                                                        # "masters_degree",
-                                                                         #"doctorate_degree",
-                                                                         #"professional_degree"))
-        View(user_data3)
-        #plotting bar chart
-        ggplot(data = user_data3[9:16,]) + 
-            geom_col(aes(x = edu_group, y = value)) +
-            labs(title = "Male Education in Your Company", 
-                 x = "Education", y = "Total") #+
-            #scale_x_discrete(labels=c("Age.Under.20.years" = "Under 20", "Age.20.to.29.years" = "20 to 29",
-                                      #"Age.30.to.39.years" = "30 to 39", "Age.40.to.49.years" = "40 to 49",
-                                      #"Age.50.to.59.years" = "50 to 59", "Age.60.years.and.over" = "Over 60"))
+    
+    #Nashville Age Pie Chart
+    output$nash_edu_pie <- renderPlot({
+      pie_edu_data <- data.frame(
+        group=c('Male','Female'),
+        value=c(age_df[2,2],age_df[3,2])
+      )
+      
+      pie_edu_data <- pie_edu_data %>% 
+        arrange(desc(group)) %>%
+        mutate(prop = value / sum(pie_edu_data$value) *100) %>%
+        mutate(ypos = cumsum(prop)- 0.5*prop)
+      
+      ggplot(pie_edu_data, aes(x="", y=value, fill=group)) +
+        geom_bar(stat="identity", width=1) +
+        coord_polar("y", start=0) +
+        theme_void() +
+        labs(title = "Percent Male and Female in Nashville")
+      #theme(legend.position = "none") +
+      #geom_text(aes(label = prop), color = "white", size=6)
     })
+    
+    
+    
+    #Company Age Pie Chart
+    output$company_edu_pie <- renderPlot({
+      user_data_edu <- read_excel_allsheets(input$user_file$datapath)[3]
+      user_data_edu <- data.frame(user_data_edu)
+      
+      pie_edu_data <- data.frame(
+        group=c('Male','Female'),
+        value=c(user_data_edu[2,2],user_data_edu[3,2])
+      )
+      
+      pie_edu_data <- pie_edu_data %>% 
+        arrange(desc(group)) %>%
+        mutate(prop = value / sum(pie_edu_data$value) *100) %>%
+        mutate(ypos = cumsum(prop)- 0.5*prop)
+      
+      #View(pie_edu_data)
+      
+      ggplot(pie_edu_data, aes(x="", y=value, fill=group)) +
+        geom_bar(stat="identity", width=1) +
+        coord_polar("y", start=0) +
+        theme_void() +
+        labs(title = "Percent Male and Female in Your Company")
+      #theme(legend.position = "none") +
+      #geom_text(aes(label = prop), color = "white", size=6)
+    })
+    
+    
+    
+    #nashville df bar charts for edu
+    output$edu_total_plot <- renderPlot({
+      ggplot(data = Datalong_edu[1:8,]) + 
+        geom_col(aes(x = edu_group, y = value)) +
+        labs(title = "Number of People per Education Level in Nashville", 
+             x = "Education Level", y = "Total") +
+        scale_x_discrete(labels=c("no_high_school_diploma" = "No High School Diploma", 
+                                  "high_school_graduate" = "High School Graduate",
+                                  "some_college_no_degree" = "Some College",
+                                  "associates_degree" = "Associate Degree", 
+                                  "bachelors_degree" = "Bachelor's Degree",
+                                  "masters_degree" = "Master's Degree",
+                                  "professional_degree" = "Professional Degree",
+                                  "doctorate_degree" = "Doctorate Degree"))
+    })
+    
+    output$edu_male_plot <- renderPlot({
+      ggplot(data = Datalong_edu[9:16,]) + 
+        geom_col(aes(x = edu_group, y = value)) +
+        labs(title = "Number of Males per Education Level in Nashville", 
+             x = "Education Level", y = "Total") +
+        scale_x_discrete(labels=c("no_high_school_diploma" = "No High School Diploma", 
+                                  "high_school_graduate" = "High School Graduate",
+                                  "some_college_no_degree" = "Some College",
+                                  "associates_degree" = "Associate Degree", 
+                                  "bachelors_degree" = "Bachelor's Degree",
+                                  "masters_degree" = "Master's Degree",
+                                  "professional_degree" = "Professional Degree",
+                                  "doctorate_degree" = "Doctorate Degree"))
+    })
+    
+    output$edu_female_plot <- renderPlot({
+      ggplot(data = Datalong_edu[17:24,]) + 
+        geom_col(aes(x = edu_group, y = value)) +
+        labs(title = "Number of Females per Education Level in Nashville", 
+             x = "Education Level", y = "Total") +
+        scale_x_discrete(labels=c("no_high_school_diploma" = "No High School Diploma", 
+                                  "high_school_graduate" = "High School Graduate",
+                                  "some_college_no_degree" = "Some College",
+                                  "associates_degree" = "Associate Degree", 
+                                  "bachelors_degree" = "Bachelor's Degree",
+                                  "masters_degree" = "Master's Degree",
+                                  "professional_degree" = "Professional Degree",
+                                  "doctorate_degree" = "Doctorate Degree"))
+    })
+    
+    #Making side by side bar chart comparing age 
+    output$user_edu_total<- renderPlot({
+      #making data frame
+      user_data_edu <- read_excel_allsheets(input$user_file$datapath)[3]
+      user_data_edu <- data.frame(user_data_edu)
+      
+      #pivot longer
+      user_data_edu <- pivot_longer(user_data_edu, cols = Education.No.High.School.Diploma:Education.Doctorate.degree, names_to = "edu_group")
+      
+      #setting factors so bar chart in right order
+      user_data_edu$edu_group <- factor(user_data_edu$edu_group,levels = c("Education.No.High.School.Diploma", 
+                                                                           "Education.High.school.graduate..includes.equivalency.",
+                                                                           "Education.Some.college..no.degree",
+                                                                           "Education.Associate.s.degree", 
+                                                                           "Education.Bachelor.s.degree",
+                                                                           "Education.Master.s.degree",
+                                                                           "Education.Professional.school.degree",
+                                                                           "Education.Doctorate.degree"))
+      #plotting bar chart
+      ggplot(data = user_data_edu[1:8,]) + 
+        geom_col(aes(x = edu_group, y = value)) +
+        labs(title = "Number of People per Education Level for Your Company", 
+             x = "Education Level", y = "Total") +
+        scale_x_discrete(labels=c("no_high_school_diploma" = "No High School Diploma", 
+                                  "high_school_graduate" = "High School Graduate",
+                                  "some_college_no_degree" = "Some College",
+                                  "associates_degree" = "Associate Degree", 
+                                  "bachelors_degree" = "Bachelor's Degree",
+                                  "masters_degree" = "Master's Degree",
+                                  "professional_degree" = "Professional Degree",
+                                  "doctorate_degree" = "Doctorate Degree"))
+    })
+    
+    output$user_edu_male<- renderPlot({
+      #making data frame
+      user_data_edu <- read_excel_allsheets(input$user_file$datapath)[3]
+      user_data_edu <- data.frame(user_data_edu)
+      
+      #pivot longer
+      user_data_edu <- pivot_longer(user_data_edu, cols = Education.No.High.School.Diploma:Education.Doctorate.degree, names_to = "edu_group")
+      
+      #setting factors so bar chart in right order
+      user_data_edu$edu_group <- factor(user_data_edu$edu_group,levels = c("Education.No.High.School.Diploma", 
+                                                                           "Education.High.school.graduate..includes.equivalency.",
+                                                                           "Education.Some.college..no.degree",
+                                                                           "Education.Associate.s.degree", 
+                                                                           "Education.Bachelor.s.degree",
+                                                                           "Education.Master.s.degree",
+                                                                           "Education.Professional.school.degree",
+                                                                           "Education.Doctorate.degree"))
+      #plotting bar chart
+      ggplot(data = user_data_edu[9:16,]) + 
+        geom_col(aes(x = edu_group, y = value)) +
+        labs(title = "Number of Males per Education Level for Your Company", 
+             x = "Education Level", y = "Total") +
+        scale_x_discrete(labels=c("no_high_school_diploma" = "No High School Diploma", 
+                                  "high_school_graduate" = "High School Graduate",
+                                  "some_college_no_degree" = "Some College",
+                                  "associates_degree" = "Associate Degree", 
+                                  "bachelors_degree" = "Bachelor's Degree",
+                                  "masters_degree" = "Master's Degree",
+                                  "professional_degree" = "Professional Degree",
+                                  "doctorate_degree" = "Doctorate Degree"))
+    })
+    
+    
+    output$user_edu_female<- renderPlot({
+      #making data frame
+      user_data_edu <- read_excel_allsheets(input$user_file$datapath)[3]
+      user_data_edu <- data.frame(user_data_edu)
+      
+      #pivot longer
+      user_data_edu <- pivot_longer(user_data_edu, cols = Education.No.High.School.Diploma:Education.Doctorate.degree, names_to = "edu_group")
+      
+      #setting factors so bar chart in right order
+      user_data_edu$edu_group <- factor(user_data_edu$edu_group,levels = c("Education.No.High.School.Diploma", 
+                                                                           "Education.High.school.graduate..includes.equivalency.",
+                                                                           "Education.Some.college..no.degree",
+                                                                           "Education.Associate.s.degree", 
+                                                                           "Education.Bachelor.s.degree",
+                                                                           "Education.Master.s.degree",
+                                                                           "Education.Professional.school.degree",
+                                                                           "Education.Doctorate.degree"))
+      #plotting bar chart
+      ggplot(data = user_data_edu[17:24,]) + 
+        geom_col(aes(x = edu_group, y = value)) +
+        labs(title = "Number of Females per Education Level for Your Company", 
+             x = "Education Level", y = "Total") +
+        scale_x_discrete(labels=c("no_high_school_diploma" = "No High School Diploma", 
+                                  "high_school_graduate" = "High School Graduate",
+                                  "some_college_no_degree" = "Some College",
+                                  "associates_degree" = "Associate Degree", 
+                                  "bachelors_degree" = "Bachelor's Degree",
+                                  "masters_degree" = "Master's Degree",
+                                  "professional_degree" = "Professional Degree",
+                                  "doctorate_degree" = "Doctorate Degree"))
+    })
+    
     
     
     
@@ -343,7 +511,7 @@ shinyServer(function(input, output, session) {
             mutate(prop = value / sum(pie_data$value) *100) %>%
             mutate(ypos = cumsum(prop)- 0.5*prop)
         
-        View(pie_data)
+        #View(pie_data)
         
         ggplot(pie_data, aes(x="", y=value, fill=group)) +
             geom_bar(stat="identity", width=1) +

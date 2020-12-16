@@ -43,7 +43,7 @@ Datalong_race$race_group <- factor(Datalong_race$race_group,levels = c("white",
                                                                        "two_or_more_races_including_other",
                                                                        "two_or_more_races_excluding_other_and_three_or_more"))
 
-#Pivot Longer on Age
+#Pivot Longer on Edu
 Datalong_edu <- pivot_longer(edu_df, cols = no_high_school_diploma:doctorate_degree, names_to = "edu_group")
 
 #setting up factors so that bar chart in right order

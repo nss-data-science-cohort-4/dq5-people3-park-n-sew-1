@@ -75,13 +75,18 @@ shinyUI(navbarPage(title = "People 3 Title Here",
                    tabPanel("Education",
                             sidebarLayout(
                               sidebarPanel(
-                                h2("Sidebar")
+                                plotOutput('nash_edu_pie'),
+                                plotOutput('company_edu_pie')
                               ),
                               mainPanel(
-                                h2("Main Panel"),
-                                plotOutput("user_edu_male")
+                                tabsetPanel(type = "tabs",
+                                            tabPanel("Total", plotOutput("edu_total_plot"), plotOutput("user_edu_total")),
+                                            tabPanel("Male", plotOutput("edu_male_plot"), plotOutput("user_edu_male")),
+                                            tabPanel("Female", plotOutput("edu_female_plot"), plotOutput("user_edu_female"))
+                                )
                               )
                             )
+                            
                    ),
                    
                    
