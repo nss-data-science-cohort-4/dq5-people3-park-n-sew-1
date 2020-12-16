@@ -55,7 +55,211 @@ shinyServer(function(input, output, session) {
     #******** RACE TAB ***********
     
     # >>> MATTTTT YOOUR WORK GOES RIGHT HERE :) <<<<<<<
+ 
+    #Nashville Age Pie Chart
+    output$nash_race_pie <- renderPlot({
+      pie_race_data <- data.frame(
+        group=c('Not Hispanic or Latino','Hispanic or Latino'),
+        value=c(race_df[2,2],race_df[3,2])
+      )
+      
+      pie_race_data <- pie_race_data %>% 
+        arrange(desc(group)) %>%
+        mutate(prop = value / sum(pie_race_data$value) *100) %>%
+        mutate(ypos = cumsum(prop)- 0.5*prop)
+      
+      ggplot(pie_race_data, aes(x="", y=value, fill=group)) +
+        geom_bar(stat="identity", width=1) +
+        coord_polar("y", start=0) +
+        theme_void() +
+        labs(title = "Percent Hispanic or Latino in Nashville")
+      #theme(legend.position = "none") +
+      #geom_text(aes(label = prop), color = "white", size=6)
+    })
     
+    
+    
+    #Company Age Pie Chart
+    output$company_race_pie <- renderPlot({
+      user_data_race <- read_excel_allsheets(input$user_file$datapath)[2]
+      user_data_race <- data.frame(user_data_race)
+      
+      pie_race_data <- data.frame(
+        group=c('Not Hispanic or Latino','Hispanic or Latino'),
+        value=c(user_data_race[2,2],user_data_race[3,2])
+      )
+      
+      pie_race_data <- pie_race_data %>% 
+        arrange(desc(group)) %>%
+        mutate(prop = value / sum(pie_race_data$value) *100) %>%
+        mutate(ypos = cumsum(prop)- 0.5*prop)
+      
+      #View(pie_race_data)
+      
+      ggplot(pie_race_data, aes(x="", y=value, fill=group)) +
+        geom_bar(stat="identity", width=1) +
+        coord_polar("y", start=0) +
+        theme_void() +
+        labs(title = "Percent Hispanic or Latino in Your Company")
+      #theme(legend.position = "none") +
+      #geom_text(aes(label = prop), color = "white", size=6)
+    })
+    
+    
+    
+    #nashville df bar charts for race
+    output$race_total_plot <- renderPlot({
+      ggplot(data = Datalong_race[1:9,]) + 
+        geom_col(aes(x = race_group, y = value)) +
+        labs(title = "Number of People per Race and Ethnicity in Nashville", 
+             x = "Race and Ethnicity Groups", y = "Total") +
+        scale_x_discrete(labels=c("white" = "White", 
+                                  "black_or_african_american" = "Black or African American", 
+                                  "american_indian_or_alaska_native" = "American Indian or Alaska Native", 
+                                  "asian" = "Asian",
+                                  "native_hawaiian_or_pacific_islander" = "Native Hawaiian or Pacific Islander",
+                                  "other_race" = "Other Race",
+                                  "two_or_more_races" = "Two or More Races",
+                                  "two_or_more_races_including_other" = "Two or More Races (including 'Other')",
+                                  "two_or_more_races_excluding_other_and_three_or_more" = "Two or More Races (excluding 'Other') and Three or More Races"))
+    })
+    
+    output$not_hispanic_plot <- renderPlot({
+      ggplot(data = Datalong_race[10:18,]) + 
+        geom_col(aes(x = race_group, y = value)) +
+        labs(title = "Race of Non-Hispanic or Latino in Nashville", 
+             x = "Race", y = "Total") +
+        scale_x_discrete(labels=c("white" = "White", 
+                                  "black_or_african_american" = "Black or African American", 
+                                  "american_indian_or_alaska_native" = "American Indian or Alaska Native", 
+                                  "asian" = "Asian",
+                                  "native_hawaiian_or_pacific_islander" = "Native Hawaiian or Pacific Islander",
+                                  "other_race" = "Other Race",
+                                  "two_or_more_races" = "Two or More Races",
+                                  "two_or_more_races_including_other" = "Two or More Races (including 'Other')",
+                                  "two_or_more_races_excluding_other_and_three_or_more" = "Two or More Races (excluding 'Other') and Three or More Races"))
+    })
+    
+    output$hispanic_plot <- renderPlot({
+      ggplot(data = Datalong_race[19:27,]) + 
+        geom_col(aes(x = race_group, y = value)) +
+        labs(title = "Race of Hispanic or Latino in Nashville", 
+             x = "Race", y = "Total") +
+        scale_x_discrete(labels=c("white" = "White", 
+                                  "black_or_african_american" = "Black or African American", 
+                                  "american_indian_or_alaska_native" = "American Indian or Alaska Native", 
+                                  "asian" = "Asian",
+                                  "native_hawaiian_or_pacific_islander" = "Native Hawaiian or Pacific Islander",
+                                  "other_race" = "Other Race",
+                                  "two_or_more_races" = "Two or More Races",
+                                  "two_or_more_races_including_other" = "Two or More Races (including 'Other')",
+                                  "two_or_more_races_excluding_other_and_three_or_more" = "Two or More Races (excluding 'Other') and Three or More Races"))
+    })
+    
+    #Making side by side bar chart comparing age 
+    output$user_race_total<- renderPlot({
+      #making data frame
+      user_data_race <- read_excel_allsheets(input$user_file$datapath)[2]
+      user_data_race <- data.frame(user_data_race)
+      
+      #pivot longer
+      user_data_race <- pivot_longer(user_data_race, cols = Race.White.alone:Race.Two.races.excluding.Some.other.race..and.three.or.more.races, names_to = "race_group")
+      
+      #setting factors so bar chart in right order
+      user_data_race$race_group <- factor(user_data_race$race_group,levels = c("Race.White.alone", 
+                                                                     "Race.Black.or.African.American", 
+                                                                     "Race.American.Indian.and.Alaska.Native", 
+                                                                     "Race.Asian",
+                                                                     "Race.Native.Hawaiian.and.Other.Pacific.Islander",
+                                                                     "Race.Some.other.race",
+                                                                     "Race.Two.or.more.races.",
+                                                                     "Race.Two.races.including.Some.other.race",
+                                                                     "Race.Two.races.excluding.Some.other.race..and.three.or.more.races"
+                                                                     ))
+      #plotting bar chart
+      ggplot(data = user_data_race[1:9,]) + 
+        geom_col(aes(x = race_group, y = value)) +
+        labs(title = "Number of People per Race for Your Company", 
+             x = "Race", y = "Total") +
+        scale_x_discrete(labels=c("Race.White.alone" = "White", 
+                                  "Race.Black.or.African.American" = "Black or African American", 
+                                  "Race.American.Indian.and.Alaska.Native" = "American Indian or Alaska Native", 
+                                  "Race.Asian" = "Asian",
+                                  "Race.Native.Hawaiian.and.Other.Pacific.Islander" = "Native Hawaiian or Pacific Islander",
+                                  "Race.Some.other.race" = "Other Race",
+                                  "Race.Two.or.more.races." = "Two or More Races",
+                                  "Race.Two.races.including.Some.other.race" = "Two or More Races (including 'Other')",
+                                  "Race.Two.races.excluding.Some.other.race..and.three.or.more.races" = "Two or More Races (excluding 'Other') and Three or More Races"))
+    })
+    
+    output$user_not_hispanic<- renderPlot({
+      #making data frame
+      user_data_race <- read_excel_allsheets(input$user_file$datapath)[2]
+      user_data_race <- data.frame(user_data_race)
+      
+      #pivot longer
+      user_data_race <- pivot_longer(user_data_race, cols = Race.White.alone:Race.Two.races.excluding.Some.other.race..and.three.or.more.races, names_to = "race_group")
+      
+      #setting factors so bar chart in right order
+      user_data_race$race_group <- factor(user_data_race$race_group,levels = c("Race.White.alone", 
+                                                                             "Race.Black.or.African.American", 
+                                                                             "Race.American.Indian.and.Alaska.Native", 
+                                                                             "Race.Asian",
+                                                                             "Race.Native.Hawaiian.and.Other.Pacific.Islander",
+                                                                             "Race.Some.other.race",
+                                                                             "Race.Two.or.more.races.",
+                                                                             "Race.Two.races.including.Some.other.race",
+                                                                             "Race.Two.races.excluding.Some.other.race..and.three.or.more.races"))
+      #plotting bar chart
+      ggplot(data = user_data_race[10:18,]) + 
+        geom_col(aes(x = race_group, y = value)) +
+        labs(title = "Race of Non-Hispanic or Latino in Your Company", 
+             x = "Race", y = "Total") +
+        scale_x_discrete(labels=c("Race.White.alone" = "White", 
+                                  "Race.Black.or.African.American" = "Black or African American", 
+                                  "Race.American.Indian.and.Alaska.Native" = "American Indian or Alaska Native", 
+                                  "Race.Asian" = "Asian",
+                                  "Race.Native.Hawaiian.and.Other.Pacific.Islander" = "Native Hawaiian or Pacific Islander",
+                                  "Race.Some.other.race" = "Other Race",
+                                  "Race.Two.or.more.races." = "Two or More Races",
+                                  "Race.Two.races.including.Some.other.race" = "Two or More Races (including 'Other')",
+                                  "Race.Two.races.excluding.Some.other.race..and.three.or.more.races" = "Two or More Races (excluding 'Other') and Three or More Races"))
+    })
+    
+    
+    output$user_hispanic<- renderPlot({
+      #making data frame
+      user_data_race <- read_excel_allsheets(input$user_file$datapath)[2]
+      user_data_race <- data.frame(user_data_race)
+      
+      #pivot longer
+      user_data_race <- pivot_longer(user_data_race, cols = Race.White.alone:Race.Two.races.excluding.Some.other.race..and.three.or.more.races, names_to = "race_group")
+      
+      #setting factors so bar chart in right order
+      user_data_race$race_group <- factor(user_data_race$race_group,levels = c("Race.White.alone", 
+                                                                             "Race.Black.or.African.American", 
+                                                                             "Race.American.Indian.and.Alaska.Native", 
+                                                                             "Race.Asian",
+                                                                             "Race.Native.Hawaiian.and.Other.Pacific.Islander",
+                                                                             "Race.Some.other.race",
+                                                                             "Race.Two.or.more.races.",
+                                                                             "Race.Two.races.including.Some.other.race",
+                                                                             "Race.Two.races.excluding.Some.other.race..and.three.or.more.races"))
+      #plotting bar chart
+      ggplot(data = user_data_race[19:27,]) + 
+        geom_col(aes(x = race_group, y = value)) +
+        labs(title = "Race of Hispanic or Latino in Nashville", 
+             x = "Race", y = "Total") +
+        scale_x_discrete(labels=c("Race.White.alone" = "White", 
+                                  "Race.Black.or.African.American" = "Black or African American", 
+                                  "Race.American.Indian.and.Alaska.Native" = "American Indian or Alaska Native", 
+                                  "Race.Asian" = "Asian",
+                                  "Race.Native.Hawaiian.and.Other.Pacific.Islander" = "Native Hawaiian or Pacific Islander",
+                                  "Race.Some.other.race" = "Other Race",
+                                  "Race.Two.or.more.races." = "Two or More Races",
+                                  "Race.Two.races.including.Some.other.race" = "Two or More Races (including 'Other')",
+                                  "Race.Two.races.excluding.Some.other.race..and.three.or.more.races" = "Two or More Races (excluding 'Other') and Three or More Races"))
+    })   
     
     
     

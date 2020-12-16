@@ -18,7 +18,7 @@ edu_df <- data.frame(census_df_list[3])
 
 #Pivot Longer on Age
 Datalong_age <- pivot_longer(age_df, cols = age_under_20_years:age_60_years_and_over, names_to = "age_group")
-View(Datalong_age)
+#View(Datalong_age)
 
 #setting up factors so that bar chart in right order
 Datalong_age$age_group <- factor(Datalong_age$age_group,levels = c("age_under_20_years", 
@@ -28,11 +28,24 @@ Datalong_age$age_group <- factor(Datalong_age$age_group,levels = c("age_under_20
                                                        "age_50_59_years",
                                                        "age_60_years_and_over"))
 
+#Pivot Longer on Race
+Datalong_race <- pivot_longer(race_df, cols = white:two_or_more_races_excluding_other_and_three_or_more, names_to = "race_group")
+#View(Datalong_race)
 
+#setting up race factors so that bar chart in right order
+Datalong_race$race_group <- factor(Datalong_race$race_group,levels = c("white", 
+                                                                       "black_or_african_american", 
+                                                                       "american_indian_or_alaska_native", 
+                                                                       "asian",
+                                                                       "native_hawaiian_or_pacific_islander",
+                                                                       "other_race",
+                                                                       "two_or_more_races",
+                                                                       "two_or_more_races_including_other",
+                                                                       "two_or_more_races_excluding_other_and_three_or_more"))
 
 #View(age_df)
 #View(race_df)
-View(edu_df)
+#View(edu_df)
 
 read_excel_allsheets <- function(filename, tibble = FALSE) {
   sheets <- readxl::excel_sheets(filename)
@@ -41,3 +54,6 @@ read_excel_allsheets <- function(filename, tibble = FALSE) {
   names(x) <- sheets
   x
 }
+
+
+colnames(data.frame(read_excel_allsheets('../data/Example_Profile2.xlsx')[2]))
