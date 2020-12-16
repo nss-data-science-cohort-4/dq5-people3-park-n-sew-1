@@ -28,7 +28,20 @@ Datalong_age$age_group <- factor(Datalong_age$age_group,levels = c("age_under_20
                                                        "age_50_59_years",
                                                        "age_60_years_and_over"))
 
+#Pivot Longer on Race
+Datalong_race <- pivot_longer(race_df, cols = white:two_or_more_races_excluding_other_and_three_or_more, names_to = "race_group")
+#View(Datalong_race)
 
+#setting up race factors so that bar chart in right order
+Datalong_race$race_group <- factor(Datalong_race$race_group,levels = c("white", 
+                                                                       "black_or_african_american", 
+                                                                       "american_indian_or_alaska_native", 
+                                                                       "asian",
+                                                                       "native_hawaiian_or_pacific_islander",
+                                                                       "other_race",
+                                                                       "two_or_more_races",
+                                                                       "two_or_more_races_including_other",
+                                                                       "two_or_more_races_excluding_other_and_three_or_more"))
 
 #Pivot Longer on Age
 Datalong_edu <- pivot_longer(edu_df, cols = no_high_school_diploma:doctorate_degree, names_to = "edu_group")
@@ -55,3 +68,6 @@ read_excel_allsheets <- function(filename, tibble = FALSE) {
   names(x) <- sheets
   x
 }
+
+
+colnames(data.frame(read_excel_allsheets('../data/Example_Profile2.xlsx')[2]))

@@ -53,13 +53,18 @@ shinyUI(navbarPage(title = "People 3 Title Here",
                    tabPanel("Race",
                             sidebarLayout(
                               sidebarPanel(
-                                h2("Sidebar")
+                                plotOutput('nash_race_pie'),
+                                plotOutput('company_race_pie')
                               ),
                               mainPanel(
-                                h2("Main Panel")
-                                
+                                tabsetPanel(type = "tabs",
+                                            tabPanel("Total", plotOutput("race_total_plot"), plotOutput("user_race_total")),
+                                            tabPanel("Not Hispanic or Latino", plotOutput("not_hispanic_plot"), plotOutput("user_not_hispanic")),
+                                            tabPanel("Hispanic or Latino", plotOutput("hispanic_plot"), plotOutput("user_hispanic"))
+                                )
                               )
                             )
+                            
                    ),
                    
                    
