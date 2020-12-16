@@ -10,11 +10,12 @@
 # Important note that a navbarmenu cannot be the first tab/page
 shinyUI(navbarPage(title = "People 3 Title Here", 
                    
+                   # ********** ABOUT TAB **********
                    tabPanel("About Page", 
                             h4("Eventually, we will add some text here that looks nice and explains our app.")
                    ),
                    
-                   
+                   # ********** MATT'S TAB **********
                    tabPanel("Matt's Tab",
                             sidebarLayout(
                                 sidebarPanel(
@@ -22,7 +23,7 @@ shinyUI(navbarPage(title = "People 3 Title Here",
                                               #NEED ACTION OR TEXT TO EXPLAIN HOW
                                               "Upload your File",
                                               accept = c(".xls", ".xlsx")
-                                    )
+                                              )
                                 ),
                                 mainPanel(
                                   tableOutput("user_age"),
@@ -32,7 +33,7 @@ shinyUI(navbarPage(title = "People 3 Title Here",
                             )
                    ),
                    
-                   
+                   # ********** SAVANNAHS TAB **********
                    tabPanel("Savannah's tab",
                             sidebarLayout(
                                 sidebarPanel(
@@ -45,6 +46,10 @@ shinyUI(navbarPage(title = "People 3 Title Here",
                             )
                    ),
                    
+                   
+                   
+                   
+                   # ********** RACE TAB **********
                    tabPanel("Race",
                             sidebarLayout(
                               sidebarPanel(
@@ -57,6 +62,11 @@ shinyUI(navbarPage(title = "People 3 Title Here",
                             )
                    ),
                    
+                   
+                   
+                   
+                   
+                   # ********** EDUCATION TAB **********
                    tabPanel("Education",
                             sidebarLayout(
                               sidebarPanel(
@@ -69,6 +79,10 @@ shinyUI(navbarPage(title = "People 3 Title Here",
                             )
                    ),
                    
+                   
+                   
+                   
+                   # ********** AGE TAB **********
                    tabPanel("Age",
                             sidebarLayout(
                               sidebarPanel(
@@ -86,6 +100,11 @@ shinyUI(navbarPage(title = "People 3 Title Here",
                             
                    ),
                    
+                   
+                   
+                   
+                   
+                   # ********** MENU TAB (DELETE LATER)**********
                    ##Saving this incase you want to use a dropdown
                    ## Use navbarmenu to get the tab with menu capabilities
                    navbarMenu("Menu Options",
