@@ -66,7 +66,33 @@ shinyServer(function(input, output, session) {
     #******** EDUCATION TAB ***********
     
     #I WILL WORK HERE 
-    
+    output$user_edu_male<- renderPlot({
+        #making data frame
+        user_data3 <- read_excel_allsheets(input$user_file$datapath)[3]
+        user_data3 <- data.frame(user_data3)
+        View(user_data3)
+        #pivot longer
+        user_data3 <- pivot_longer(user_data3, cols = Education.No.High.School.Diploma:Education.Doctorate.degree, names_to = "edu_group")
+        
+        #setting factors so bar chart in right order
+       # user_data3$edu_group <- factor(user_data3$edu_group,levels = c("no_high_school_diploma", 
+                                                                       #  "high_school_graduate",
+                                                                        # "some_college_no_degree",
+                                                                      #   "associates_degree", 
+                                                                       #  "bachelors_degree",
+                                                                        # "masters_degree",
+                                                                         #"doctorate_degree",
+                                                                         #"professional_degree"))
+        View(user_data3)
+        #plotting bar chart
+        ggplot(data = user_data3[9:16,]) + 
+            geom_col(aes(x = edu_group, y = value)) +
+            labs(title = "Male Education in Your Company", 
+                 x = "Education", y = "Total") #+
+            #scale_x_discrete(labels=c("Age.Under.20.years" = "Under 20", "Age.20.to.29.years" = "20 to 29",
+                                      #"Age.30.to.39.years" = "30 to 39", "Age.40.to.49.years" = "40 to 49",
+                                      #"Age.50.to.59.years" = "50 to 59", "Age.60.years.and.over" = "Over 60"))
+    })
     
     
     
@@ -237,8 +263,6 @@ shinyServer(function(input, output, session) {
     
 
     
-
-        
 
     
   

@@ -18,7 +18,7 @@ edu_df <- data.frame(census_df_list[3])
 
 #Pivot Longer on Age
 Datalong_age <- pivot_longer(age_df, cols = age_under_20_years:age_60_years_and_over, names_to = "age_group")
-View(Datalong_age)
+#View(Datalong_age)
 
 #setting up factors so that bar chart in right order
 Datalong_age$age_group <- factor(Datalong_age$age_group,levels = c("age_under_20_years", 
@@ -30,9 +30,23 @@ Datalong_age$age_group <- factor(Datalong_age$age_group,levels = c("age_under_20
 
 
 
+#Pivot Longer on Age
+Datalong_edu <- pivot_longer(edu_df, cols = no_high_school_diploma:doctorate_degree, names_to = "edu_group")
+
+#setting up factors so that bar chart in right order
+Datalong_edu$edu_group <- factor(Datalong_edu$edu_group,levels = c("no_high_school_diploma", 
+                                                                   "high_school_graduate",
+                                                                   "some_college_no_degree",
+                                                                   "associates_degree", 
+                                                                   "bachelors_degree",
+                                                                   "masters_degree",
+                                                                   "doctorate_degree",
+                                                                   "professional_degree"))
+
+
 #View(age_df)
 #View(race_df)
-View(edu_df)
+#View(edu_df)
 
 read_excel_allsheets <- function(filename, tibble = FALSE) {
   sheets <- readxl::excel_sheets(filename)
