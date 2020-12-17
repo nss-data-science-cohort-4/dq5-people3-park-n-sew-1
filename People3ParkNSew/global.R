@@ -3,7 +3,7 @@ library(tidyverse)
 library(ggplot2)
 library(shinydashboard)
 library(wesanderson)
-library(viridis)
+library(RColorBrewer)
 
 options(scipen = 999)
 
@@ -72,5 +72,9 @@ read_excel_allsheets <- function(filename, tibble = FALSE) {
   x
 }
 
-
 colnames(data.frame(read_excel_allsheets('../data/Example_Profile2.xlsx')[2]))
+
+#Create Color palettes
+pal <- c("#FFD5B3", "#C66F00")
+
+
