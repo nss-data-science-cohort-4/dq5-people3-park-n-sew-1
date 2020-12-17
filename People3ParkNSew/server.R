@@ -7,35 +7,8 @@ shinyServer(function(input, output, session) {
     
     
     #******** MATT'S TAB ***********
-    
+  
     #Making a table for each user input sheet 
-    output$user_age<- renderTable({
-        user_data1 <- read_excel_allsheets(input$user_file$datapath)[1]
-        
-        if (is.null(user_data1))
-        {return(NULL)}
-        else
-        {return(user_data1)}
-    })
-    
-    output$user_race<- renderTable({
-        user_data2 <- read_excel_allsheets(input$user_file$datapath)[2]
-        
-        if (is.null(user_data2))
-        {return(NULL)}
-        else
-        {return(user_data2)}
-    })
-    
-    output$user_edu<- renderTable({
-        user_data3 <- read_excel_allsheets(input$user_file$datapath)[3]
-        
-        if (is.null(user_data3))
-        {return(NULL)}
-        else
-        {return(user_data3)}
-    }) 
-    
     output$downloadData <- downloadHandler(
       filename = 'User_Company_Template.xlsx',
       content = function(file) {
@@ -46,21 +19,9 @@ shinyServer(function(input, output, session) {
     
     
     
-    #******** SAVANNAH'S TAB (DELETE LATER) ***********
-    #Savannah's Output for her Page
-    output$plot2 <- renderPlot({
-        hist(mtcars$mpg, col ="lightblue1", breaks=input$sav_slider )
-    })
-    
-    
-    
-    
-    
     
     
     #******** RACE TAB ***********
-    
-    # >>> MATTTTT YOOUR WORK GOES RIGHT HERE :) <<<<<<<
  
     #Nashville Race Pie Chart
     output$nash_race_pie <- renderPlot({
@@ -79,15 +40,45 @@ shinyServer(function(input, output, session) {
         coord_polar("y", start=0) +
         theme_void() +
         labs(title = "Percent Hispanic or Latino in Nashville") +
-        theme(plot.title = element_text(hjust = 0.5)) +
-        scale_fill_manual(values = wes_palette("IsleofDogs2"))
+        theme(plot.title = element_text(hjust = 0.5, size = 14,face="bold")) +
+        scale_fill_manual(values = wes_palette("IsleofDogs2")) #+
       #theme(legend.position = "none") +
-      #geom_text(aes(label = prop), color = "white", size=6)
+      #geom_text(aes(label = paste(format(round(prop, 2), nsmall = 2), "%"), color = "black", size=6))
     })
     
     
+    #Print text for percents Nashville Race Hisp
+    # output$percent_text_race_nash <- renderText({ 
+    #   pie_race_data <- data.frame(
+    #     group=c('Not Hispanic or Latino','Hispanic or Latino'),
+    #     value=c(race_df[2,2],race_df[3,2])
+    #   )
+    #   
+    #   pie_race_data <- pie_race_data %>% 
+    #     arrange(desc(group)) %>%
+    #     mutate(prop = value / sum(pie_race_data$value) *100) %>%
+    #     mutate(ypos = cumsum(prop)- 0.5*prop)
+    #   
+    #   paste("Percent Hispanic or Latino: ", format(round(pie_race_data[2,3], 2), nsmall = 2), "%")
+    # })
+    # 
+    # #Print text for percents Nashville Race Not Hisp
+    # output$percent_text_race_nash_not <- renderText({ 
+    #   pie_race_data <- data.frame(
+    #     group=c('Not Hispanic or Latino','Hispanic or Latino'),
+    #     value=c(race_df[2,2],race_df[3,2])
+    #   )
+    #   
+    #   pie_race_data <- pie_race_data %>% 
+    #     arrange(desc(group)) %>%
+    #     mutate(prop = value / sum(pie_race_data$value) *100) %>%
+    #     mutate(ypos = cumsum(prop)- 0.5*prop)
+    #   
+    #   paste("Percent Not Hispanic or Latino: ", format(round(pie_race_data[1,3], 2), nsmall = 2), "%")
+    # })
     
-    #Company Age Pie Chart
+    
+    #Company Race Pie Chart
     output$company_race_pie <- renderPlot({
       user_data_race <- read_excel_allsheets(input$user_file$datapath)[2]
       user_data_race <- data.frame(user_data_race)
@@ -109,11 +100,52 @@ shinyServer(function(input, output, session) {
         coord_polar("y", start=0) +
         theme_void() +
         labs(title = "Percent Hispanic or Latino in Your Company") +
-        theme(plot.title = element_text(hjust = 0.5)) +
+        theme(plot.title = element_text(hjust = 0.5, size = 14,face="bold")) +
         scale_fill_manual(values = wes_palette("IsleofDogs2"))
       #theme(legend.position = "none") +
       #geom_text(aes(label = prop), color = "white", size=6)
     })
+    
+    # #Print text for percents User Race Hisp
+    # output$percent_text_race_user <- renderText({ 
+    #   
+    #   user_data_race <- read_excel_allsheets(input$user_file$datapath)[2]
+    #   user_data_race <- data.frame(user_data_race)
+    #     
+    #   pie_race_data <- data.frame(
+    #     group=c('Not Hispanic or Latino','Hispanic or Latino'),
+    #     value=c(user_data_race[2,2],user_data_race[3,2])
+    #     )
+    #     
+    #   pie_race_data <- pie_race_data %>% 
+    #     arrange(desc(group)) %>%
+    #     mutate(prop = value / sum(pie_race_data$value) *100) %>%
+    #     mutate(ypos = cumsum(prop)- 0.5*prop)
+    #   
+    #   paste("Percent Hispanic or Latino: ", format(round(pie_race_data[2,3], 2), nsmall = 2), "%")
+    # })
+    # 
+    # #Print text for percents User Race Not Hisp
+    # output$percent_text_race_user_not <- renderText({ 
+    #   user_data_race <- read_excel_allsheets(input$user_file$datapath)[2]
+    #   user_data_race <- data.frame(user_data_race)
+    #     
+    #   pie_race_data <- data.frame(
+    #     group=c('Not Hispanic or Latino','Hispanic or Latino'),
+    #     value=c(user_data_race[2,2],user_data_race[3,2])
+    #   )
+    #     
+    #   pie_race_data <- pie_race_data %>% 
+    #     arrange(desc(group)) %>%
+    #     mutate(prop = value / sum(pie_race_data$value) *100) %>%
+    #     mutate(ypos = cumsum(prop)- 0.5*prop)
+    #   
+    #   paste("Percent Not Hispanic or Latino: ", format(round(pie_race_data[1,3], 2), nsmall = 2), "%")
+    # })
+    # 
+    
+    
+    
     
     
     
@@ -133,7 +165,8 @@ shinyServer(function(input, output, session) {
                                   "two_or_more_races_including_other" = "Two or More Races (inc. 'Other')",
                                   "two_or_more_races_excluding_other_and_three_or_more" = "Two and Three or More Races")) +
         theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
-              plot.title = element_text(hjust = 0.5)) +
+              plot.title = element_text(hjust = 0.5, size = 18,face="bold"), axis.text=element_text(size=12),
+              axis.title=element_text(size=14)) +
         scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
     })
 
@@ -152,7 +185,8 @@ shinyServer(function(input, output, session) {
                                   "two_or_more_races_including_other" = "Two or More Races (inc. 'Other')",
                                   "two_or_more_races_excluding_other_and_three_or_more" = "Two and Three or More Races")) +
         theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
-              plot.title = element_text(hjust = 0.5)) +
+              plot.title = element_text(hjust = 0.5, size = 18,face="bold"), axis.text=element_text(size=12),
+              axis.title=element_text(size=14)) +
         scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
     })
     
@@ -171,7 +205,8 @@ shinyServer(function(input, output, session) {
                                   "two_or_more_races_including_other" = "Two or More Races (inc. 'Other')",
                                   "two_or_more_races_excluding_other_and_three_or_more" = "Two and Three or More Races")) +
         theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
-              plot.title = element_text(hjust = 0.5)) +
+              plot.title = element_text(hjust = 0.5, size = 18,face="bold"), axis.text=element_text(size=12),
+              axis.title=element_text(size=14)) +
         scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
     })
     
@@ -210,7 +245,8 @@ shinyServer(function(input, output, session) {
                                   "Race.Two.races.including.Some.other.race" = "Two or More Races (inc. 'Other')",
                                   "Race.Two.races.excluding.Some.other.race..and.three.or.more.races" = "Two and Three or More Races")) +
         theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
-              plot.title = element_text(hjust = 0.5)) +
+              plot.title = element_text(hjust = 0.5, size = 18,face="bold"), axis.text=element_text(size=12),
+              axis.title=element_text(size=14)) +
         scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
     })
     
@@ -247,7 +283,8 @@ shinyServer(function(input, output, session) {
                                   "Race.Two.races.including.Some.other.race" = "Two or More Races (inc. 'Other')",
                                   "Race.Two.races.excluding.Some.other.race..and.three.or.more.races" = "Two and Three or More Races")) +
         theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
-              plot.title = element_text(hjust = 0.5)) +
+              plot.title = element_text(hjust = 0.5, size = 18,face="bold"), axis.text=element_text(size=12),
+              axis.title=element_text(size=14)) +
         scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
     })
     
@@ -285,9 +322,14 @@ shinyServer(function(input, output, session) {
                                   "Race.Two.races.including.Some.other.race" = "Two or More Races (inc. 'Other')",
                                   "Race.Two.races.excluding.Some.other.race..and.three.or.more.races" = "Two and Three or More Races")) +
         theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
-              plot.title = element_text(hjust = 0.5)) +
+              plot.title = element_text(hjust = 0.5, size = 18,face="bold"), axis.text=element_text(size=12),
+              axis.title=element_text(size=14)) +
         scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
     })   
+    
+    
+    
+    
     
     
     
@@ -315,7 +357,7 @@ shinyServer(function(input, output, session) {
         coord_polar("y", start=0) +
         theme_void() +
         labs(title = "Percent Male and Female in Nashville") +
-        theme(plot.title = element_text(hjust = 0.5)) +
+        theme(plot.title = element_text(hjust = 0.5, size = 14,face="bold")) +
         scale_fill_manual(values = wes_palette("IsleofDogs2"))
       #theme(legend.position = "none") +
       #geom_text(aes(label = prop), color = "white", size=6)
@@ -337,15 +379,14 @@ shinyServer(function(input, output, session) {
         arrange(desc(group)) %>%
         mutate(prop = value / sum(pie_edu_data$value) *100) %>%
         mutate(ypos = cumsum(prop)- 0.5*prop)
-      
-      #View(pie_edu_data)
+     
       
       ggplot(pie_edu_data, aes(x="", y=value, fill=group)) +
         geom_bar(stat="identity", width=1) +
         coord_polar("y", start=0) +
         theme_void() +
         labs(title = "Percent Male and Female in Your Company") +
-        theme(plot.title = element_text(hjust = 0.5)) +
+        theme(plot.title = element_text(hjust = 0.5, size = 14,face="bold")) +
         scale_fill_manual(values = wes_palette("IsleofDogs2"))
       #theme(legend.position = "none") +
       #geom_text(aes(label = prop), color = "white", size=6)
@@ -368,7 +409,8 @@ shinyServer(function(input, output, session) {
                                   "professional_degree" = "Professional Degree",
                                   "doctorate_degree" = "Doctorate Degree")) +
         theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
-              plot.title = element_text(hjust = 0.5)) +
+              plot.title = element_text(hjust = 0.5, size = 18,face="bold"), axis.text=element_text(size=12),
+              axis.title=element_text(size=14)) +
         scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
     })
     
@@ -386,7 +428,8 @@ shinyServer(function(input, output, session) {
                                   "professional_degree" = "Professional Degree",
                                   "doctorate_degree" = "Doctorate Degree")) +
         theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
-              plot.title = element_text(hjust = 0.5)) +
+              plot.title = element_text(hjust = 0.5, size = 18,face="bold"), axis.text=element_text(size=12),
+              axis.title=element_text(size=14)) +
         scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
     })
     
@@ -404,7 +447,8 @@ shinyServer(function(input, output, session) {
                                   "professional_degree" = "Professional Degree",
                                   "doctorate_degree" = "Doctorate Degree")) +
         theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
-              plot.title = element_text(hjust = 0.5)) +
+              plot.title = element_text(hjust = 0.5, size = 18,face="bold"), axis.text=element_text(size=12),
+              axis.title=element_text(size=14)) +
         scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
     })
     
@@ -440,7 +484,8 @@ shinyServer(function(input, output, session) {
                                   "Education.Professional.school.degree" = "Professional Degree",
                                   "Education.Doctorate.degree" = "Doctorate Degree")) +
         theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
-              plot.title = element_text(hjust = 0.5)) +
+              plot.title = element_text(hjust = 0.5, size = 18,face="bold"), axis.text=element_text(size=12),
+              axis.title=element_text(size=14)) +
         scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
     })
     
@@ -475,7 +520,8 @@ shinyServer(function(input, output, session) {
                                   "Education.Professional.school.degree" = "Professional Degree",
                                   "Education.Doctorate.degree" = "Doctorate Degree")) +
         theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
-              plot.title = element_text(hjust = 0.5)) +
+              plot.title = element_text(hjust = 0.5, size = 18,face="bold"), axis.text=element_text(size=12),
+              axis.title=element_text(size=14)) +
         scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
     })
     
@@ -511,9 +557,14 @@ shinyServer(function(input, output, session) {
                                   "Education.Professional.school.degree" = "Professional Degree",
                                   "Education.Doctorate.degree" = "Doctorate Degree")) +
         theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
-              plot.title = element_text(hjust = 0.5)) +
+              plot.title = element_text(hjust = 0.5, size = 18,face="bold"), axis.text=element_text(size=12),
+              axis.title=element_text(size=14)) +
         scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
     })
+    
+    
+    
+    
     
     
     
@@ -540,7 +591,7 @@ shinyServer(function(input, output, session) {
             coord_polar("y", start=0) +
             theme_void() +
             labs(title = "Percent Male and Female in Nashville") +
-          theme(plot.title = element_text(hjust = 0.5)) +
+          theme(plot.title = element_text(hjust = 0.5, size = 14,face="bold")) +
           scale_fill_manual(values = wes_palette("IsleofDogs2"))
             #theme(legend.position = "none") +
             #geom_text(aes(label = prop), color = "white", size=6)
@@ -570,12 +621,11 @@ shinyServer(function(input, output, session) {
             coord_polar("y", start=0) +
             theme_void() +
             labs(title = "Percent Male and Female in Your Company") +
-          theme(plot.title = element_text(hjust = 0.5)) +
+          theme(plot.title = element_text(hjust = 0.5, size = 14,face="bold")) +
           scale_fill_manual(values = wes_palette("IsleofDogs2"))
         #theme(legend.position = "none") +
         #geom_text(aes(label = prop), color = "white", size=6)
     })
-    
     
     
     #nashville df bar charts for age
@@ -587,7 +637,9 @@ shinyServer(function(input, output, session) {
             scale_x_discrete(labels=c("age_under_20_years" = "Under 20", "age_20_29_years" = "20 to 29",
                                       "age_30_39_years" = "30 to 39", "age_40_49_years" = "40 to 49",
                                       "age_50_59_years" = "50 to 59", "age_60_years_and_over" = "Over 60")) +
-        theme(plot.title = element_text(hjust = 0.5)) +
+        theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
+              plot.title = element_text(hjust = 0.5, size = 18,face="bold"), axis.text=element_text(size=12),
+              axis.title=element_text(size=14)) +
         scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
     })
     
@@ -599,7 +651,9 @@ shinyServer(function(input, output, session) {
             scale_x_discrete(labels=c("age_under_20_years" = "Under 20", "age_20_29_years" = "20 to 29",
                                       "age_30_39_years" = "30 to 39", "age_40_49_years" = "40 to 49",
                                       "age_50_59_years" = "50 to 59", "age_60_years_and_over" = "Over 60")) +
-        theme(plot.title = element_text(hjust = 0.5)) +
+        theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
+              plot.title = element_text(hjust = 0.5, size = 18,face="bold"), axis.text=element_text(size=12),
+              axis.title=element_text(size=14)) +
         scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
     })
     
@@ -611,7 +665,9 @@ shinyServer(function(input, output, session) {
             scale_x_discrete(labels=c("age_under_20_years" = "Under 20", "age_20_29_years" = "20 to 29",
                                       "age_30_39_years" = "30 to 39", "age_40_49_years" = "40 to 49",
                                       "age_50_59_years" = "50 to 59", "age_60_years_and_over" = "Over 60")) +
-        theme(plot.title = element_text(hjust = 0.5)) +
+        theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
+              plot.title = element_text(hjust = 0.5, size = 18,face="bold"), axis.text=element_text(size=12),
+              axis.title=element_text(size=14)) +
         scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
     })
     
@@ -639,7 +695,9 @@ shinyServer(function(input, output, session) {
             scale_x_discrete(labels=c("Age.Under.20.years" = "Under 20", "Age.20.to.29.years" = "20 to 29",
                                       "Age.30.to.39.years" = "30 to 39", "Age.40.to.49.years" = "40 to 49",
                                       "Age.50.to.59.years" = "50 to 59", "Age.60.years.and.over" = "Over 60")) +
-          theme(plot.title = element_text(hjust = 0.5)) +
+          theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
+                plot.title = element_text(hjust = 0.5, size = 18,face="bold"), axis.text=element_text(size=12),
+                axis.title=element_text(size=14)) +
           scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
     })
     
@@ -666,7 +724,9 @@ shinyServer(function(input, output, session) {
             scale_x_discrete(labels=c("Age.Under.20.years" = "Under 20", "Age.20.to.29.years" = "20 to 29",
                                       "Age.30.to.39.years" = "30 to 39", "Age.40.to.49.years" = "40 to 49",
                                       "Age.50.to.59.years" = "50 to 59", "Age.60.years.and.over" = "Over 60")) +
-          theme(plot.title = element_text(hjust = 0.5)) +
+          theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
+                plot.title = element_text(hjust = 0.5, size = 18,face="bold"), axis.text=element_text(size=12),
+                axis.title=element_text(size=14)) +
           scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
     })
     
@@ -694,22 +754,9 @@ shinyServer(function(input, output, session) {
             scale_x_discrete(labels=c("Age.Under.20.years" = "Under 20", "Age.20.to.29.years" = "20 to 29",
                                       "Age.30.to.39.years" = "30 to 39", "Age.40.to.49.years" = "40 to 49",
                                       "Age.50.to.59.years" = "50 to 59", "Age.60.years.and.over" = "Over 60")) +
-          theme(plot.title = element_text(hjust = 0.5)) +
+          theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
+                plot.title = element_text(hjust = 0.5, size = 18,face="bold"), axis.text=element_text(size=12),
+                axis.title=element_text(size=14)) +
           scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
     })
-    
-    
-
-    
-
-    
-  
-    #******** MENU DROPDOWN TAB (DELETE LATER) ***********
-    
-    # for display of mtcars dataset summary statistics in the "Menu item A page"
-    output$summary <- renderPrint({
-        summary(mtcars)
-    })
-    
-    
 })
