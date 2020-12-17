@@ -3,6 +3,8 @@ library(tidyverse)
 library(ggplot2)
 options(scipen = 999)
 library(shinydashboard)
+library(wesanderson)
+library(viridis)
 
 census_df_list <- readRDS('../data/census_df.rds')
 

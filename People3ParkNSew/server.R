@@ -62,7 +62,7 @@ shinyServer(function(input, output, session) {
     
     # >>> MATTTTT YOOUR WORK GOES RIGHT HERE :) <<<<<<<
  
-    #Nashville Age Pie Chart
+    #Nashville Race Pie Chart
     output$nash_race_pie <- renderPlot({
       pie_race_data <- data.frame(
         group=c('Not Hispanic or Latino','Hispanic or Latino'),
@@ -78,7 +78,9 @@ shinyServer(function(input, output, session) {
         geom_bar(stat="identity", width=1) +
         coord_polar("y", start=0) +
         theme_void() +
-        labs(title = "Percent Hispanic or Latino in Nashville")
+        labs(title = "Percent Hispanic or Latino in Nashville") +
+        theme(plot.title = element_text(hjust = 0.5)) +
+        scale_fill_manual(values = wes_palette("IsleofDogs2"))
       #theme(legend.position = "none") +
       #geom_text(aes(label = prop), color = "white", size=6)
     })
@@ -106,7 +108,9 @@ shinyServer(function(input, output, session) {
         geom_bar(stat="identity", width=1) +
         coord_polar("y", start=0) +
         theme_void() +
-        labs(title = "Percent Hispanic or Latino in Your Company")
+        labs(title = "Percent Hispanic or Latino in Your Company") +
+        theme(plot.title = element_text(hjust = 0.5)) +
+        scale_fill_manual(values = wes_palette("IsleofDogs2"))
       #theme(legend.position = "none") +
       #geom_text(aes(label = prop), color = "white", size=6)
     })
@@ -116,7 +120,7 @@ shinyServer(function(input, output, session) {
     #nashville df bar charts for race
     output$race_total_plot <- renderPlot({
       ggplot(data = Datalong_race[1:9,]) + 
-        geom_col(aes(x = race_group, y = value)) +
+        geom_col(aes(x = race_group, y = value, fill=value)) +
         labs(title = "Number of People per Race and Ethnicity in Nashville", 
              x = "Race and Ethnicity Groups", y = "Total") +
         scale_x_discrete(labels=c("white" = "White", 
@@ -126,13 +130,16 @@ shinyServer(function(input, output, session) {
                                   "native_hawaiian_or_pacific_islander" = "Native Hawaiian or Pacific Islander",
                                   "other_race" = "Other Race",
                                   "two_or_more_races" = "Two or More Races",
-                                  "two_or_more_races_including_other" = "Two or More Races (including 'Other')",
-                                  "two_or_more_races_excluding_other_and_three_or_more" = "Two or More Races (excluding 'Other') and Three or More Races"))
+                                  "two_or_more_races_including_other" = "Two or More Races (inc. 'Other')",
+                                  "two_or_more_races_excluding_other_and_three_or_more" = "Two and Three or More Races")) +
+        theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
+              plot.title = element_text(hjust = 0.5)) +
+        scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
     })
-    
+
     output$not_hispanic_plot <- renderPlot({
       ggplot(data = Datalong_race[10:18,]) + 
-        geom_col(aes(x = race_group, y = value)) +
+        geom_col(aes(x = race_group, y = value, fill=value)) +
         labs(title = "Race of Non-Hispanic or Latino in Nashville", 
              x = "Race", y = "Total") +
         scale_x_discrete(labels=c("white" = "White", 
@@ -142,13 +149,16 @@ shinyServer(function(input, output, session) {
                                   "native_hawaiian_or_pacific_islander" = "Native Hawaiian or Pacific Islander",
                                   "other_race" = "Other Race",
                                   "two_or_more_races" = "Two or More Races",
-                                  "two_or_more_races_including_other" = "Two or More Races (including 'Other')",
-                                  "two_or_more_races_excluding_other_and_three_or_more" = "Two or More Races (excluding 'Other') and Three or More Races"))
+                                  "two_or_more_races_including_other" = "Two or More Races (inc. 'Other')",
+                                  "two_or_more_races_excluding_other_and_three_or_more" = "Two and Three or More Races")) +
+        theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
+              plot.title = element_text(hjust = 0.5)) +
+        scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
     })
     
     output$hispanic_plot <- renderPlot({
       ggplot(data = Datalong_race[19:27,]) + 
-        geom_col(aes(x = race_group, y = value)) +
+        geom_col(aes(x = race_group, y = value, fill=value)) +
         labs(title = "Race of Hispanic or Latino in Nashville", 
              x = "Race", y = "Total") +
         scale_x_discrete(labels=c("white" = "White", 
@@ -158,8 +168,11 @@ shinyServer(function(input, output, session) {
                                   "native_hawaiian_or_pacific_islander" = "Native Hawaiian or Pacific Islander",
                                   "other_race" = "Other Race",
                                   "two_or_more_races" = "Two or More Races",
-                                  "two_or_more_races_including_other" = "Two or More Races (including 'Other')",
-                                  "two_or_more_races_excluding_other_and_three_or_more" = "Two or More Races (excluding 'Other') and Three or More Races"))
+                                  "two_or_more_races_including_other" = "Two or More Races (inc. 'Other')",
+                                  "two_or_more_races_excluding_other_and_three_or_more" = "Two and Three or More Races")) +
+        theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
+              plot.title = element_text(hjust = 0.5)) +
+        scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
     })
     
     #Making side by side bar chart comparing age 
@@ -184,7 +197,7 @@ shinyServer(function(input, output, session) {
                                                                      ))
       #plotting bar chart
       ggplot(data = user_data_race[1:9,]) + 
-        geom_col(aes(x = race_group, y = value)) +
+        geom_col(aes(x = race_group, y = value, fill=value)) +
         labs(title = "Number of People per Race for Your Company", 
              x = "Race", y = "Total") +
         scale_x_discrete(labels=c("Race.White.alone" = "White", 
@@ -194,8 +207,11 @@ shinyServer(function(input, output, session) {
                                   "Race.Native.Hawaiian.and.Other.Pacific.Islander" = "Native Hawaiian or Pacific Islander",
                                   "Race.Some.other.race" = "Other Race",
                                   "Race.Two.or.more.races." = "Two or More Races",
-                                  "Race.Two.races.including.Some.other.race" = "Two or More Races (including 'Other')",
-                                  "Race.Two.races.excluding.Some.other.race..and.three.or.more.races" = "Two or More Races (excluding 'Other') and Three or More Races"))
+                                  "Race.Two.races.including.Some.other.race" = "Two or More Races (inc. 'Other')",
+                                  "Race.Two.races.excluding.Some.other.race..and.three.or.more.races" = "Two and Three or More Races")) +
+        theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
+              plot.title = element_text(hjust = 0.5)) +
+        scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
     })
     
     output$user_not_hispanic<- renderPlot({
@@ -218,8 +234,8 @@ shinyServer(function(input, output, session) {
                                                                              "Race.Two.races.excluding.Some.other.race..and.three.or.more.races"))
       #plotting bar chart
       ggplot(data = user_data_race[10:18,]) + 
-        geom_col(aes(x = race_group, y = value)) +
-        labs(title = "Race of Non-Hispanic or Latino in Your Company", 
+        geom_col(aes(x = race_group, y = value, fill=value)) +
+        labs(title = "Race of Non-Hispanic or Latino for Your Company", 
              x = "Race", y = "Total") +
         scale_x_discrete(labels=c("Race.White.alone" = "White", 
                                   "Race.Black.or.African.American" = "Black or African American", 
@@ -228,8 +244,11 @@ shinyServer(function(input, output, session) {
                                   "Race.Native.Hawaiian.and.Other.Pacific.Islander" = "Native Hawaiian or Pacific Islander",
                                   "Race.Some.other.race" = "Other Race",
                                   "Race.Two.or.more.races." = "Two or More Races",
-                                  "Race.Two.races.including.Some.other.race" = "Two or More Races (including 'Other')",
-                                  "Race.Two.races.excluding.Some.other.race..and.three.or.more.races" = "Two or More Races (excluding 'Other') and Three or More Races"))
+                                  "Race.Two.races.including.Some.other.race" = "Two or More Races (inc. 'Other')",
+                                  "Race.Two.races.excluding.Some.other.race..and.three.or.more.races" = "Two and Three or More Races")) +
+        theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
+              plot.title = element_text(hjust = 0.5)) +
+        scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
     })
     
     
@@ -253,7 +272,7 @@ shinyServer(function(input, output, session) {
                                                                              "Race.Two.races.excluding.Some.other.race..and.three.or.more.races"))
       #plotting bar chart
       ggplot(data = user_data_race[19:27,]) + 
-        geom_col(aes(x = race_group, y = value)) +
+        geom_col(aes(x = race_group, y = value, fill=value)) +
         labs(title = "Race of Hispanic or Latino in Nashville", 
              x = "Race", y = "Total") +
         scale_x_discrete(labels=c("Race.White.alone" = "White", 
@@ -263,8 +282,11 @@ shinyServer(function(input, output, session) {
                                   "Race.Native.Hawaiian.and.Other.Pacific.Islander" = "Native Hawaiian or Pacific Islander",
                                   "Race.Some.other.race" = "Other Race",
                                   "Race.Two.or.more.races." = "Two or More Races",
-                                  "Race.Two.races.including.Some.other.race" = "Two or More Races (including 'Other')",
-                                  "Race.Two.races.excluding.Some.other.race..and.three.or.more.races" = "Two or More Races (excluding 'Other') and Three or More Races"))
+                                  "Race.Two.races.including.Some.other.race" = "Two or More Races (inc. 'Other')",
+                                  "Race.Two.races.excluding.Some.other.race..and.three.or.more.races" = "Two and Three or More Races")) +
+        theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
+              plot.title = element_text(hjust = 0.5)) +
+        scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
     })   
     
     
@@ -292,7 +314,9 @@ shinyServer(function(input, output, session) {
         geom_bar(stat="identity", width=1) +
         coord_polar("y", start=0) +
         theme_void() +
-        labs(title = "Percent Male and Female in Nashville")
+        labs(title = "Percent Male and Female in Nashville") +
+        theme(plot.title = element_text(hjust = 0.5)) +
+        scale_fill_manual(values = wes_palette("IsleofDogs2"))
       #theme(legend.position = "none") +
       #geom_text(aes(label = prop), color = "white", size=6)
     })
@@ -320,7 +344,9 @@ shinyServer(function(input, output, session) {
         geom_bar(stat="identity", width=1) +
         coord_polar("y", start=0) +
         theme_void() +
-        labs(title = "Percent Male and Female in Your Company")
+        labs(title = "Percent Male and Female in Your Company") +
+        theme(plot.title = element_text(hjust = 0.5)) +
+        scale_fill_manual(values = wes_palette("IsleofDogs2"))
       #theme(legend.position = "none") +
       #geom_text(aes(label = prop), color = "white", size=6)
     })
@@ -330,7 +356,7 @@ shinyServer(function(input, output, session) {
     #nashville df bar charts for edu
     output$edu_total_plot <- renderPlot({
       ggplot(data = Datalong_edu[1:8,]) + 
-        geom_col(aes(x = edu_group, y = value)) +
+        geom_col(aes(x = edu_group, y = value, fill=value)) +
         labs(title = "Number of People per Education Level in Nashville", 
              x = "Education Level", y = "Total") +
         scale_x_discrete(labels=c("no_high_school_diploma" = "No High School Diploma", 
@@ -340,12 +366,15 @@ shinyServer(function(input, output, session) {
                                   "bachelors_degree" = "Bachelor's Degree",
                                   "masters_degree" = "Master's Degree",
                                   "professional_degree" = "Professional Degree",
-                                  "doctorate_degree" = "Doctorate Degree"))
+                                  "doctorate_degree" = "Doctorate Degree")) +
+        theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
+              plot.title = element_text(hjust = 0.5)) +
+        scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
     })
     
     output$edu_male_plot <- renderPlot({
       ggplot(data = Datalong_edu[9:16,]) + 
-        geom_col(aes(x = edu_group, y = value)) +
+        geom_col(aes(x = edu_group, y = value, fill=value)) +
         labs(title = "Number of Males per Education Level in Nashville", 
              x = "Education Level", y = "Total") +
         scale_x_discrete(labels=c("no_high_school_diploma" = "No High School Diploma", 
@@ -355,12 +384,15 @@ shinyServer(function(input, output, session) {
                                   "bachelors_degree" = "Bachelor's Degree",
                                   "masters_degree" = "Master's Degree",
                                   "professional_degree" = "Professional Degree",
-                                  "doctorate_degree" = "Doctorate Degree"))
+                                  "doctorate_degree" = "Doctorate Degree")) +
+        theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
+              plot.title = element_text(hjust = 0.5)) +
+        scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
     })
     
     output$edu_female_plot <- renderPlot({
       ggplot(data = Datalong_edu[17:24,]) + 
-        geom_col(aes(x = edu_group, y = value)) +
+        geom_col(aes(x = edu_group, y = value, fill=value)) +
         labs(title = "Number of Females per Education Level in Nashville", 
              x = "Education Level", y = "Total") +
         scale_x_discrete(labels=c("no_high_school_diploma" = "No High School Diploma", 
@@ -370,7 +402,10 @@ shinyServer(function(input, output, session) {
                                   "bachelors_degree" = "Bachelor's Degree",
                                   "masters_degree" = "Master's Degree",
                                   "professional_degree" = "Professional Degree",
-                                  "doctorate_degree" = "Doctorate Degree"))
+                                  "doctorate_degree" = "Doctorate Degree")) +
+        theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
+              plot.title = element_text(hjust = 0.5)) +
+        scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
     })
     
     #Making side by side bar chart comparing age 
@@ -393,17 +428,20 @@ shinyServer(function(input, output, session) {
                                                                            "Education.Doctorate.degree"))
       #plotting bar chart
       ggplot(data = user_data_edu[1:8,]) + 
-        geom_col(aes(x = edu_group, y = value)) +
+        geom_col(aes(x = edu_group, y = value, fill=value)) +
         labs(title = "Number of People per Education Level for Your Company", 
              x = "Education Level", y = "Total") +
-        scale_x_discrete(labels=c("no_high_school_diploma" = "No High School Diploma", 
-                                  "high_school_graduate" = "High School Graduate",
-                                  "some_college_no_degree" = "Some College",
-                                  "associates_degree" = "Associate Degree", 
-                                  "bachelors_degree" = "Bachelor's Degree",
-                                  "masters_degree" = "Master's Degree",
-                                  "professional_degree" = "Professional Degree",
-                                  "doctorate_degree" = "Doctorate Degree"))
+        scale_x_discrete(labels=c("Education.No.High.School.Diploma" = "No High School Diploma", 
+                                  "Education.High.school.graduate..includes.equivalency." = "High School Graduate",
+                                  "Education.Some.college..no.degree" = "Some College",
+                                  "Education.Associate.s.degree" = "Associate Degree", 
+                                  "Education.Bachelor.s.degree" = "Bachelor's Degree",
+                                  "Education.Master.s.degree" = "Master's Degree",
+                                  "Education.Professional.school.degree" = "Professional Degree",
+                                  "Education.Doctorate.degree" = "Doctorate Degree")) +
+        theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
+              plot.title = element_text(hjust = 0.5)) +
+        scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
     })
     
     output$user_edu_male<- renderPlot({
@@ -425,17 +463,20 @@ shinyServer(function(input, output, session) {
                                                                            "Education.Doctorate.degree"))
       #plotting bar chart
       ggplot(data = user_data_edu[9:16,]) + 
-        geom_col(aes(x = edu_group, y = value)) +
+        geom_col(aes(x = edu_group, y = value, fill=value)) +
         labs(title = "Number of Males per Education Level for Your Company", 
              x = "Education Level", y = "Total") +
-        scale_x_discrete(labels=c("no_high_school_diploma" = "No High School Diploma", 
-                                  "high_school_graduate" = "High School Graduate",
-                                  "some_college_no_degree" = "Some College",
-                                  "associates_degree" = "Associate Degree", 
-                                  "bachelors_degree" = "Bachelor's Degree",
-                                  "masters_degree" = "Master's Degree",
-                                  "professional_degree" = "Professional Degree",
-                                  "doctorate_degree" = "Doctorate Degree"))
+        scale_x_discrete(labels=c("Education.No.High.School.Diploma" = "No High School Diploma", 
+                                  "Education.High.school.graduate..includes.equivalency." = "High School Graduate",
+                                  "Education.Some.college..no.degree" = "Some College",
+                                  "Education.Associate.s.degree" = "Associate Degree", 
+                                  "Education.Bachelor.s.degree" = "Bachelor's Degree",
+                                  "Education.Master.s.degree" = "Master's Degree",
+                                  "Education.Professional.school.degree" = "Professional Degree",
+                                  "Education.Doctorate.degree" = "Doctorate Degree")) +
+        theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
+              plot.title = element_text(hjust = 0.5)) +
+        scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
     })
     
     
@@ -458,17 +499,20 @@ shinyServer(function(input, output, session) {
                                                                            "Education.Doctorate.degree"))
       #plotting bar chart
       ggplot(data = user_data_edu[17:24,]) + 
-        geom_col(aes(x = edu_group, y = value)) +
+        geom_col(aes(x = edu_group, y = value, fill=value)) +
         labs(title = "Number of Females per Education Level for Your Company", 
              x = "Education Level", y = "Total") +
-        scale_x_discrete(labels=c("no_high_school_diploma" = "No High School Diploma", 
-                                  "high_school_graduate" = "High School Graduate",
-                                  "some_college_no_degree" = "Some College",
-                                  "associates_degree" = "Associate Degree", 
-                                  "bachelors_degree" = "Bachelor's Degree",
-                                  "masters_degree" = "Master's Degree",
-                                  "professional_degree" = "Professional Degree",
-                                  "doctorate_degree" = "Doctorate Degree"))
+        scale_x_discrete(labels=c("Education.No.High.School.Diploma" = "No High School Diploma", 
+                                  "Education.High.school.graduate..includes.equivalency." = "High School Graduate",
+                                  "Education.Some.college..no.degree" = "Some College",
+                                  "Education.Associate.s.degree" = "Associate Degree", 
+                                  "Education.Bachelor.s.degree" = "Bachelor's Degree",
+                                  "Education.Master.s.degree" = "Master's Degree",
+                                  "Education.Professional.school.degree" = "Professional Degree",
+                                  "Education.Doctorate.degree" = "Doctorate Degree")) +
+        theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
+              plot.title = element_text(hjust = 0.5)) +
+        scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
     })
     
     
@@ -495,7 +539,9 @@ shinyServer(function(input, output, session) {
             geom_bar(stat="identity", width=1) +
             coord_polar("y", start=0) +
             theme_void() +
-            labs(title = "Percent Male and Female in Nashville")
+            labs(title = "Percent Male and Female in Nashville") +
+          theme(plot.title = element_text(hjust = 0.5)) +
+          scale_fill_manual(values = wes_palette("IsleofDogs2"))
             #theme(legend.position = "none") +
             #geom_text(aes(label = prop), color = "white", size=6)
     })
@@ -523,7 +569,9 @@ shinyServer(function(input, output, session) {
             geom_bar(stat="identity", width=1) +
             coord_polar("y", start=0) +
             theme_void() +
-            labs(title = "Percent Male and Female in Your Company")
+            labs(title = "Percent Male and Female in Your Company") +
+          theme(plot.title = element_text(hjust = 0.5)) +
+          scale_fill_manual(values = wes_palette("IsleofDogs2"))
         #theme(legend.position = "none") +
         #geom_text(aes(label = prop), color = "white", size=6)
     })
@@ -533,32 +581,38 @@ shinyServer(function(input, output, session) {
     #nashville df bar charts for age
     output$age_total_plot <- renderPlot({
         ggplot(data = Datalong_age[1:6,]) + 
-            geom_col(aes(x = age_group, y = value)) +
+            geom_col(aes(x = age_group, y = value, fill=value)) +
             labs(title = "Number of People per Age Group in Nashville", 
                  x = "Age Groups", y = "Total") +
             scale_x_discrete(labels=c("age_under_20_years" = "Under 20", "age_20_29_years" = "20 to 29",
                                       "age_30_39_years" = "30 to 39", "age_40_49_years" = "40 to 49",
-                                      "age_50_59_years" = "50 to 59", "age_60_years_and_over" = "Over 60"))
+                                      "age_50_59_years" = "50 to 59", "age_60_years_and_over" = "Over 60")) +
+        theme(plot.title = element_text(hjust = 0.5)) +
+        scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
     })
     
     output$age_male_plot <- renderPlot({
         ggplot(data = Datalong_age[7:12,]) + 
-            geom_col(aes(x = age_group, y = value)) +
+            geom_col(aes(x = age_group, y = value, fill=value)) +
             labs(title = "Number of Males per Age Group in Nashville", 
                  x = "Age Groups", y = "Total") +
             scale_x_discrete(labels=c("age_under_20_years" = "Under 20", "age_20_29_years" = "20 to 29",
                                       "age_30_39_years" = "30 to 39", "age_40_49_years" = "40 to 49",
-                                      "age_50_59_years" = "50 to 59", "age_60_years_and_over" = "Over 60"))
+                                      "age_50_59_years" = "50 to 59", "age_60_years_and_over" = "Over 60")) +
+        theme(plot.title = element_text(hjust = 0.5)) +
+        scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
     })
     
     output$age_female_plot <- renderPlot({
         ggplot(data = Datalong_age[13:18,]) + 
-            geom_col(aes(x = age_group, y = value)) +
+            geom_col(aes(x = age_group, y = value, fill=value)) +
             labs(title = "Number of Females per Age Group in Nashville", 
                  x = "Age Groups", y = "Total") +
             scale_x_discrete(labels=c("age_under_20_years" = "Under 20", "age_20_29_years" = "20 to 29",
                                       "age_30_39_years" = "30 to 39", "age_40_49_years" = "40 to 49",
-                                      "age_50_59_years" = "50 to 59", "age_60_years_and_over" = "Over 60"))
+                                      "age_50_59_years" = "50 to 59", "age_60_years_and_over" = "Over 60")) +
+        theme(plot.title = element_text(hjust = 0.5)) +
+        scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
     })
     
     #Making side by side bar chart comparing age 
@@ -579,12 +633,14 @@ shinyServer(function(input, output, session) {
                                                                         "Age.60.years.and.over"))
         #plotting bar chart
         ggplot(data = user_data1[1:6,]) + 
-            geom_col(aes(x = age_group, y = value)) +
+            geom_col(aes(x = age_group, y = value, fill=value)) +
             labs(title = "Number of People per Age Group for Your Company", 
                  x = "Age Groups", y = "Total") +
             scale_x_discrete(labels=c("Age.Under.20.years" = "Under 20", "Age.20.to.29.years" = "20 to 29",
                                       "Age.30.to.39.years" = "30 to 39", "Age.40.to.49.years" = "40 to 49",
-                                      "Age.50.to.59.years" = "50 to 59", "Age.60.years.and.over" = "Over 60"))
+                                      "Age.50.to.59.years" = "50 to 59", "Age.60.years.and.over" = "Over 60")) +
+          theme(plot.title = element_text(hjust = 0.5)) +
+          scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
     })
     
     output$user_age_male<- renderPlot({
@@ -604,12 +660,14 @@ shinyServer(function(input, output, session) {
                                                                        "Age.60.years.and.over"))
         #plotting bar chart
         ggplot(data = user_data1[7:13,]) + 
-            geom_col(aes(x = age_group, y = value)) +
+            geom_col(aes(x = age_group, y = value, fill=value)) +
             labs(title = "Number of Males per Age Group for Your Company", 
                  x = "Age Groups", y = "Total") +
             scale_x_discrete(labels=c("Age.Under.20.years" = "Under 20", "Age.20.to.29.years" = "20 to 29",
                                       "Age.30.to.39.years" = "30 to 39", "Age.40.to.49.years" = "40 to 49",
-                                      "Age.50.to.59.years" = "50 to 59", "Age.60.years.and.over" = "Over 60"))
+                                      "Age.50.to.59.years" = "50 to 59", "Age.60.years.and.over" = "Over 60")) +
+          theme(plot.title = element_text(hjust = 0.5)) +
+          scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
     })
     
     
@@ -630,12 +688,14 @@ shinyServer(function(input, output, session) {
                                                                        "Age.60.years.and.over"))
         #plotting bar chart
         ggplot(data = user_data1[13:18,]) + 
-            geom_col(aes(x = age_group, y = value)) +
+            geom_col(aes(x = age_group, y = value, fill=value)) +
             labs(title = "Number of Females per Age Group for Your Company", 
                  x = "Age Groups", y = "Total") +
             scale_x_discrete(labels=c("Age.Under.20.years" = "Under 20", "Age.20.to.29.years" = "20 to 29",
                                       "Age.30.to.39.years" = "30 to 39", "Age.40.to.49.years" = "40 to 49",
-                                      "Age.50.to.59.years" = "50 to 59", "Age.60.years.and.over" = "Over 60"))
+                                      "Age.50.to.59.years" = "50 to 59", "Age.60.years.and.over" = "Over 60")) +
+          theme(plot.title = element_text(hjust = 0.5)) +
+          scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
     })
     
     
