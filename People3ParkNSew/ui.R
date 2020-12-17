@@ -15,28 +15,31 @@ shinyUI(navbarPage(title = "People 3 Demo App",
                             h4("Eventually, we will add some text here that looks nice and explains our app.")
                    ),
                    
-                   # ********** MATT'S TAB **********
-                   tabPanel("Matt's Tab",
+                   # ********** Upload Data TAB **********
+                   tabPanel("Upload Your Data",
                             sidebarLayout(
                                 sidebarPanel(
                                     fileInput("user_file", 
                                               #NEED ACTION OR TEXT TO EXPLAIN HOW
                                               "Upload your File",
                                               accept = c(".xls", ".xlsx")
-                                              ),
-                                    h4('How to Input Your Data:'),
-                                    h5('1. Click the button below and download the excel template.'),
-                                    h5('2. Fill in the three excel sheets with your 
-                                       companies data (the totals should self-calculate.)'),
-                                    h5('3. Save the filled in template to your computer.'),
-                                    h5('4. Using the `Browse...` button above upload the file.'),
-                                    h5('5. You are ready to start using our web app!'),
-                                    downloadButton("downloadData", "Download Template")
+                                              )
                                 ),
                                 mainPanel(
-                                  tableOutput("user_age"),
-                                  tableOutput("user_race"),
-                                  tableOutput("user_edu")
+                                  h2('How to Input Your Data:'),
+                                  h4('1. Click the \"Download\" button below and download the excel template.'),
+                                  h4('2. Fill in the three excel sheets with your 
+                                       company\'s data (the totals should self-calculate).'),
+                                  h4('3. Save the filled-in template to your computer.'),
+                                  h4('4. Using the \"Browse...\" button (to the left) upload the file.'),
+                                  h4('5. You are ready to start using our web app!'),
+                                  h2('Sample Template:'),
+                                  img(src='capture.PNG', height="80%", width="80%", align = "center"),
+                                  h6(""),
+                                  downloadButton("downloadData", "Download Template")
+                                  #tableOutput("user_age"),
+                                  #tableOutput("user_race"),
+                                  #tableOutput("user_edu")
                                 )
                             )
                    ),
