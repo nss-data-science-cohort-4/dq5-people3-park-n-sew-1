@@ -26,6 +26,7 @@ shinyUI(navbarPage(title = "People 3 Title Here",
                                               )
                                 ),
                                 mainPanel(
+                                  img(src='Capture.png', height="80%", width="80%", align = "right"),
                                   tableOutput("user_age"),
                                   tableOutput("user_race"),
                                   tableOutput("user_edu")

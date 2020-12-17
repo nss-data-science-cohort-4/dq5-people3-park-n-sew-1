@@ -10,12 +10,14 @@ shinyServer(function(input, output, session) {
     
     #Making a table for each user input sheet 
     output$user_age<- renderTable({
+        
         user_data1 <- read_excel_allsheets(input$user_file$datapath)[1]
         
-        if (is.null(user_data1))
+        if (is.null(input$user_file))
         {return(NULL)}
         else
         {return(user_data1)}
+  
     })
     
     output$user_race<- renderTable({
