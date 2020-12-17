@@ -41,7 +41,7 @@ shinyServer(function(input, output, session) {
         theme_void() +
         labs(title = "Percent Hispanic or Latino in Nashville") +
         theme(plot.title = element_text(hjust = 0.5, size = 14,face="bold")) +
-        scale_fill_manual(values = wes_palette("IsleofDogs2")) #+
+        scale_fill_manual(values=c("#FFD5B3", "#C66F00"))
       #theme(legend.position = "none") +
       #geom_text(aes(label = paste(format(round(prop, 2), nsmall = 2), "%"), color = "black", size=6))
     })
@@ -101,11 +101,11 @@ shinyServer(function(input, output, session) {
         theme_void() +
         labs(title = "Percent Hispanic or Latino in Your Company") +
         theme(plot.title = element_text(hjust = 0.5, size = 14,face="bold")) +
-        scale_fill_manual(values = wes_palette("IsleofDogs2"))
+        scale_fill_manual(values=c("#FFD5B3", "#C66F00"))
       #theme(legend.position = "none") +
       #geom_text(aes(label = prop), color = "white", size=6)
     })
-    
+      
     # #Print text for percents User Race Hisp
     # output$percent_text_race_user <- renderText({ 
     #   
@@ -167,7 +167,7 @@ shinyServer(function(input, output, session) {
         theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
               plot.title = element_text(hjust = 0.5, size = 18,face="bold"), axis.text=element_text(size=12),
               axis.title=element_text(size=14)) +
-        scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
+        scale_fill_gradient(low= "#FFD5B3", high= "#C66F00")
     })
 
     output$not_hispanic_plot <- renderPlot({
@@ -187,7 +187,7 @@ shinyServer(function(input, output, session) {
         theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
               plot.title = element_text(hjust = 0.5, size = 18,face="bold"), axis.text=element_text(size=12),
               axis.title=element_text(size=14)) +
-        scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
+        scale_fill_gradient(low= "#FFD5B3", high= "#C66F00")
     })
     
     output$hispanic_plot <- renderPlot({
@@ -207,7 +207,7 @@ shinyServer(function(input, output, session) {
         theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
               plot.title = element_text(hjust = 0.5, size = 18,face="bold"), axis.text=element_text(size=12),
               axis.title=element_text(size=14)) +
-        scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
+        scale_fill_gradient(low= "#FFD5B3", high= "#C66F00")
     })
     
     #Making side by side bar chart comparing age 
@@ -247,7 +247,7 @@ shinyServer(function(input, output, session) {
         theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
               plot.title = element_text(hjust = 0.5, size = 18,face="bold"), axis.text=element_text(size=12),
               axis.title=element_text(size=14)) +
-        scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
+        scale_fill_gradient(low= "#FFD5B3", high= "#C66F00")
     })
     
     output$user_not_hispanic<- renderPlot({
@@ -285,7 +285,7 @@ shinyServer(function(input, output, session) {
         theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
               plot.title = element_text(hjust = 0.5, size = 18,face="bold"), axis.text=element_text(size=12),
               axis.title=element_text(size=14)) +
-        scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
+        scale_fill_gradient(low= "#FFD5B3", high= "#C66F00")
     })
     
     
@@ -324,7 +324,7 @@ shinyServer(function(input, output, session) {
         theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
               plot.title = element_text(hjust = 0.5, size = 18,face="bold"), axis.text=element_text(size=12),
               axis.title=element_text(size=14)) +
-        scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
+        scale_fill_gradient(low= "#FFD5B3", high= "#C66F00")
     })   
     
     
@@ -358,7 +358,7 @@ shinyServer(function(input, output, session) {
         theme_void() +
         labs(title = "Percent Male and Female in Nashville") +
         theme(plot.title = element_text(hjust = 0.5, size = 14,face="bold")) +
-        scale_fill_manual(values = wes_palette("IsleofDogs2"))
+        scale_fill_manual(values=c("#FFD5B3", "#C66F00"))
       #theme(legend.position = "none") +
       #geom_text(aes(label = prop), color = "white", size=6)
     })
@@ -387,7 +387,7 @@ shinyServer(function(input, output, session) {
         theme_void() +
         labs(title = "Percent Male and Female in Your Company") +
         theme(plot.title = element_text(hjust = 0.5, size = 14,face="bold")) +
-        scale_fill_manual(values = wes_palette("IsleofDogs2"))
+        scale_fill_manual(values=c("#FFD5B3", "#C66F00"))
       #theme(legend.position = "none") +
       #geom_text(aes(label = prop), color = "white", size=6)
     })
@@ -411,7 +411,7 @@ shinyServer(function(input, output, session) {
         theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
               plot.title = element_text(hjust = 0.5, size = 18,face="bold"), axis.text=element_text(size=12),
               axis.title=element_text(size=14)) +
-        scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
+        scale_fill_gradient(low= "#FFD5B3", high= "#C66F00")
     })
     
     output$edu_male_plot <- renderPlot({
@@ -430,7 +430,7 @@ shinyServer(function(input, output, session) {
         theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
               plot.title = element_text(hjust = 0.5, size = 18,face="bold"), axis.text=element_text(size=12),
               axis.title=element_text(size=14)) +
-        scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
+        scale_fill_gradient(low= "#FFD5B3", high= "#C66F00")
     })
     
     output$edu_female_plot <- renderPlot({
@@ -449,7 +449,7 @@ shinyServer(function(input, output, session) {
         theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
               plot.title = element_text(hjust = 0.5, size = 18,face="bold"), axis.text=element_text(size=12),
               axis.title=element_text(size=14)) +
-        scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
+        scale_fill_gradient(low= "#FFD5B3", high= "#C66F00")
     })
     
     #Making side by side bar chart comparing age 
@@ -486,7 +486,7 @@ shinyServer(function(input, output, session) {
         theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
               plot.title = element_text(hjust = 0.5, size = 18,face="bold"), axis.text=element_text(size=12),
               axis.title=element_text(size=14)) +
-        scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
+        scale_fill_gradient(low= "#FFD5B3", high= "#C66F00")
     })
     
     output$user_edu_male<- renderPlot({
@@ -522,7 +522,7 @@ shinyServer(function(input, output, session) {
         theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
               plot.title = element_text(hjust = 0.5, size = 18,face="bold"), axis.text=element_text(size=12),
               axis.title=element_text(size=14)) +
-        scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
+        scale_fill_gradient(low= "#FFD5B3", high= "#C66F00")
     })
     
     
@@ -559,7 +559,7 @@ shinyServer(function(input, output, session) {
         theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
               plot.title = element_text(hjust = 0.5, size = 18,face="bold"), axis.text=element_text(size=12),
               axis.title=element_text(size=14)) +
-        scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
+        scale_fill_gradient(low= "#FFD5B3", high= "#C66F00")
     })
     
     
@@ -592,7 +592,7 @@ shinyServer(function(input, output, session) {
             theme_void() +
             labs(title = "Percent Male and Female in Nashville") +
           theme(plot.title = element_text(hjust = 0.5, size = 14,face="bold")) +
-          scale_fill_manual(values = wes_palette("IsleofDogs2"))
+          scale_fill_manual(values=c("#FFD5B3", "#C66F00"))
             #theme(legend.position = "none") +
             #geom_text(aes(label = prop), color = "white", size=6)
     })
@@ -622,7 +622,7 @@ shinyServer(function(input, output, session) {
             theme_void() +
             labs(title = "Percent Male and Female in Your Company") +
           theme(plot.title = element_text(hjust = 0.5, size = 14,face="bold")) +
-          scale_fill_manual(values = wes_palette("IsleofDogs2"))
+          scale_fill_manual(values=c("#FFD5B3", "#C66F00"))
         #theme(legend.position = "none") +
         #geom_text(aes(label = prop), color = "white", size=6)
     })
@@ -640,7 +640,7 @@ shinyServer(function(input, output, session) {
         theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
               plot.title = element_text(hjust = 0.5, size = 18,face="bold"), axis.text=element_text(size=12),
               axis.title=element_text(size=14)) +
-        scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
+        scale_fill_gradient(low= "#FFD5B3", high= "#C66F00")
     })
     
     output$age_male_plot <- renderPlot({
@@ -654,7 +654,7 @@ shinyServer(function(input, output, session) {
         theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
               plot.title = element_text(hjust = 0.5, size = 18,face="bold"), axis.text=element_text(size=12),
               axis.title=element_text(size=14)) +
-        scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
+        scale_fill_gradient(low= "#FFD5B3", high= "#C66F00")
     })
     
     output$age_female_plot <- renderPlot({
@@ -668,7 +668,7 @@ shinyServer(function(input, output, session) {
         theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
               plot.title = element_text(hjust = 0.5, size = 18,face="bold"), axis.text=element_text(size=12),
               axis.title=element_text(size=14)) +
-        scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
+        scale_fill_gradient(low= "#FFD5B3", high= "#C66F00")
     })
     
     #Making side by side bar chart comparing age 
@@ -698,7 +698,7 @@ shinyServer(function(input, output, session) {
           theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
                 plot.title = element_text(hjust = 0.5, size = 18,face="bold"), axis.text=element_text(size=12),
                 axis.title=element_text(size=14)) +
-          scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
+          scale_fill_gradient(low= "#FFD5B3", high= "#C66F00")
     })
     
     output$user_age_male<- renderPlot({
@@ -727,7 +727,7 @@ shinyServer(function(input, output, session) {
           theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
                 plot.title = element_text(hjust = 0.5, size = 18,face="bold"), axis.text=element_text(size=12),
                 axis.title=element_text(size=14)) +
-          scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
+          scale_fill_gradient(low= "#FFD5B3", high= "#C66F00")
     })
     
     
@@ -757,6 +757,6 @@ shinyServer(function(input, output, session) {
           theme(axis.text.x = element_text(angle = 30, vjust=0.9, hjust=0.9),
                 plot.title = element_text(hjust = 0.5, size = 18,face="bold"), axis.text=element_text(size=12),
                 axis.title=element_text(size=14)) +
-          scale_fill_gradientn(colours = wes_palette("IsleofDogs2", type='continuous'))
+          scale_fill_gradient(low= "#FFD5B3", high= "#C66F00")
     })
 })

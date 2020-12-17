@@ -1,5 +1,5 @@
 
-shinyUI(navbarPage(title = "People 3 Demo App", 
+shinyUI(navbarPage(title = "People 3 Demo App", inverse = TRUE,
                    
                    # ********** ABOUT TAB **********
                    tabPanel("About", 
