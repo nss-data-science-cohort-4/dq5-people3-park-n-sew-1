@@ -1,10 +1,11 @@
 library(shiny)
 library(tidyverse)
 library(ggplot2)
-options(scipen = 999)
 library(shinydashboard)
 library(wesanderson)
 library(viridis)
+
+options(scipen = 999)
 
 census_df_list <- readRDS('../data/census_df.rds')
 
