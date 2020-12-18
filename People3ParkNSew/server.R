@@ -1,10 +1,24 @@
 shinyServer(function(input, output, session) {
     
-    
-    #******** ABOUT TAB ***********
-    
-    
-    
+  age_df <- reactive({
+    paste0(input$usercity,"_age_df")
+  })
+  edu_df <- reactive({
+    paste0(input$usercity,"_edu_df")
+  })
+  race_df <- reactive({
+    paste0(input$usercity,"_race_df")
+  })
+  Datalong_age <- reactive({
+    paste0(input$usercity,"_Datalong_age")
+  })
+  Datalong_race <- reactive({
+    paste0(input$usercity,"_Datalong_race")
+  })
+  Datalong_edu <- reactive({
+    paste0(input$usercity,"_Datalong_edu")
+  })
+  
     
     #******** MATT'S TAB ***********
   
@@ -23,11 +37,12 @@ shinyServer(function(input, output, session) {
     
     #******** RACE TAB ***********
  
-    #Nashville Race Pie Chart
+    #Your City Race Pie Chart
+    #race_df <- input$usercity_race_df
     output$nash_race_pie <- renderPlot({
       pie_race_data <- data.frame(
         group=c('Not Hispanic or Latino','Hispanic or Latino'),
-        value=c(race_df[2,2],race_df[3,2])
+        value=c(eval(as.name(race_df()))[2,2], eval(as.name(race_df()))[3,2])
       )
       
       pie_race_data <- pie_race_data %>% 
@@ -39,7 +54,7 @@ shinyServer(function(input, output, session) {
         geom_bar(stat="identity", width=1) +
         coord_polar("y", start=0) +
         theme_void() +
-        labs(title = "Percent Hispanic or Latino in Nashville") +
+        labs(title = paste("Percent Hispanic or Latino in", input$usercity)) +
         theme(plot.title = element_text(hjust = 0.5, size = 14,face="bold")) +
         scale_fill_manual(values=c("#FFD5B3", "#C66F00"))
       #theme(legend.position = "none") +
@@ -47,7 +62,7 @@ shinyServer(function(input, output, session) {
     })
     
     
-    #Print text for percents Nashville Race Hisp
+    #Print text for percents Your City Race Hisp
     # output$percent_text_race_nash <- renderText({ 
     #   pie_race_data <- data.frame(
     #     group=c('Not Hispanic or Latino','Hispanic or Latino'),
@@ -62,7 +77,7 @@ shinyServer(function(input, output, session) {
     #   paste("Percent Hispanic or Latino: ", format(round(pie_race_data[2,3], 2), nsmall = 2), "%")
     # })
     # 
-    # #Print text for percents Nashville Race Not Hisp
+    # #Print text for percents Your City Race Not Hisp
     # output$percent_text_race_nash_not <- renderText({ 
     #   pie_race_data <- data.frame(
     #     group=c('Not Hispanic or Latino','Hispanic or Latino'),
@@ -146,14 +161,11 @@ shinyServer(function(input, output, session) {
     
     
     
-    
-    
-    
-    #nashville df bar charts for race
+    #Your City df bar charts for race
     output$race_total_plot <- renderPlot({
-      ggplot(data = Datalong_race[1:9,]) + 
+      ggplot(data = eval(as.name(Datalong_race()))[1:9,]) + 
         geom_col(aes(x = race_group, y = value, fill=value)) +
-        labs(title = "Number of People per Race and Ethnicity in Nashville", 
+        labs(title = paste("Number of People per Race and Ethnicity in", input$usercity), 
              x = "Race and Ethnicity Groups", y = "Total") +
         scale_x_discrete(labels=c("white" = "White", 
                                   "black_or_african_american" = "Black or African American", 
@@ -171,9 +183,9 @@ shinyServer(function(input, output, session) {
     })
 
     output$not_hispanic_plot <- renderPlot({
-      ggplot(data = Datalong_race[10:18,]) + 
+      ggplot(data = eval(as.name(Datalong_race()))[10:18,]) + 
         geom_col(aes(x = race_group, y = value, fill=value)) +
-        labs(title = "Race of Non-Hispanic or Latino in Nashville", 
+        labs(title = paste("Race of Non-Hispanic or Latino in", input$usercity), 
              x = "Race", y = "Total") +
         scale_x_discrete(labels=c("white" = "White", 
                                   "black_or_african_american" = "Black or African American", 
@@ -191,9 +203,9 @@ shinyServer(function(input, output, session) {
     })
     
     output$hispanic_plot <- renderPlot({
-      ggplot(data = Datalong_race[19:27,]) + 
+      ggplot(data = eval(as.name(Datalong_race()))[19:27,]) + 
         geom_col(aes(x = race_group, y = value, fill=value)) +
-        labs(title = "Race of Hispanic or Latino in Nashville", 
+        labs(title = paste("Race of Hispanic or Latino in", input$usercity), 
              x = "Race", y = "Total") +
         scale_x_discrete(labels=c("white" = "White", 
                                   "black_or_african_american" = "Black or African American", 
@@ -310,7 +322,7 @@ shinyServer(function(input, output, session) {
       #plotting bar chart
       ggplot(data = user_data_race[19:27,]) + 
         geom_col(aes(x = race_group, y = value, fill=value)) +
-        labs(title = "Race of Hispanic or Latino in Nashville", 
+        labs(title = "Race of Hispanic or Latino for Your Company", 
              x = "Race", y = "Total") +
         scale_x_discrete(labels=c("Race.White.alone" = "White", 
                                   "Race.Black.or.African.American" = "Black or African American", 
@@ -340,11 +352,11 @@ shinyServer(function(input, output, session) {
     #******** EDUCATION TAB ***********
     
     
-    #Nashville Age Pie Chart
+    #Your City Age Pie Chart
     output$nash_edu_pie <- renderPlot({
       pie_edu_data <- data.frame(
         group=c('Male','Female'),
-        value=c(age_df[2,2],age_df[3,2])
+        value=c(eval(as.name(edu_df()))[2,2], eval(as.name(edu_df()))[3,2])
       )
       
       pie_edu_data <- pie_edu_data %>% 
@@ -356,7 +368,7 @@ shinyServer(function(input, output, session) {
         geom_bar(stat="identity", width=1) +
         coord_polar("y", start=0) +
         theme_void() +
-        labs(title = "Percent Male and Female in Nashville") +
+        labs(title = paste("Percent Male and Female in", input$usercity)) +
         theme(plot.title = element_text(hjust = 0.5, size = 14,face="bold")) +
         scale_fill_manual(values=c("#FFD5B3", "#C66F00"))
       #theme(legend.position = "none") +
@@ -394,11 +406,11 @@ shinyServer(function(input, output, session) {
     
     
     
-    #nashville df bar charts for edu
+    #Your City df bar charts for edu
     output$edu_total_plot <- renderPlot({
-      ggplot(data = Datalong_edu[1:8,]) + 
+      ggplot(data = eval(as.name(Datalong_edu()))[1:8,]) + 
         geom_col(aes(x = edu_group, y = value, fill=value)) +
-        labs(title = "Number of People per Education Level in Nashville", 
+        labs(title = paste("Number of People per Education Level in", input$usercity), 
              x = "Education Level", y = "Total") +
         scale_x_discrete(labels=c("no_high_school_diploma" = "No High School Diploma", 
                                   "high_school_graduate" = "High School Graduate",
@@ -415,9 +427,9 @@ shinyServer(function(input, output, session) {
     })
     
     output$edu_male_plot <- renderPlot({
-      ggplot(data = Datalong_edu[9:16,]) + 
+      ggplot(data = eval(as.name(Datalong_edu()))[9:16,]) + 
         geom_col(aes(x = edu_group, y = value, fill=value)) +
-        labs(title = "Number of Males per Education Level in Nashville", 
+        labs(title = paste("Number of Males per Education Level in", input$usercity), 
              x = "Education Level", y = "Total") +
         scale_x_discrete(labels=c("no_high_school_diploma" = "No High School Diploma", 
                                   "high_school_graduate" = "High School Graduate",
@@ -434,9 +446,9 @@ shinyServer(function(input, output, session) {
     })
     
     output$edu_female_plot <- renderPlot({
-      ggplot(data = Datalong_edu[17:24,]) + 
+      ggplot(data = eval(as.name(Datalong_edu()))[17:24,]) + 
         geom_col(aes(x = edu_group, y = value, fill=value)) +
-        labs(title = "Number of Females per Education Level in Nashville", 
+        labs(title = paste("Number of Females per Education Level in", input$usercity), 
              x = "Education Level", y = "Total") +
         scale_x_discrete(labels=c("no_high_school_diploma" = "No High School Diploma", 
                                   "high_school_graduate" = "High School Graduate",
@@ -574,11 +586,11 @@ shinyServer(function(input, output, session) {
     
     #******** AGE TAB ***********
     
-    #Nashville Age Pie Chart
+    #Your City Age Pie Chart
     output$nash_age_pie <- renderPlot({
         pie_data <- data.frame(
             group=c('Male','Female'),
-            value=c(age_df[2,2],age_df[3,2])
+            value=c(eval(as.name(age_df()))[2,2], eval(as.name(age_df()))[3,2])
         )
         
         pie_data <- pie_data %>% 
@@ -590,7 +602,7 @@ shinyServer(function(input, output, session) {
             geom_bar(stat="identity", width=1) +
             coord_polar("y", start=0) +
             theme_void() +
-            labs(title = "Percent Male and Female in Nashville") +
+            labs(title = paste("Percent Male and Female in", input$usercity)) +
           theme(plot.title = element_text(hjust = 0.5, size = 14,face="bold")) +
           scale_fill_manual(values=c("#FFD5B3", "#C66F00"))
             #theme(legend.position = "none") +
@@ -627,12 +639,11 @@ shinyServer(function(input, output, session) {
         #geom_text(aes(label = prop), color = "white", size=6)
     })
     
-    
-    #nashville df bar charts for age
+    #Your City df bar charts for age
     output$age_total_plot <- renderPlot({
-        ggplot(data = Datalong_age[1:6,]) + 
+        ggplot(data = eval(as.name(Datalong_age()))[1:6,]) + 
             geom_col(aes(x = age_group, y = value, fill=value)) +
-            labs(title = "Number of People per Age Group in Nashville", 
+            labs(title = paste("Number of People per Age Group in", input$usercity), 
                  x = "Age Groups", y = "Total") +
             scale_x_discrete(labels=c("age_under_20_years" = "Under 20", "age_20_29_years" = "20 to 29",
                                       "age_30_39_years" = "30 to 39", "age_40_49_years" = "40 to 49",
@@ -644,9 +655,9 @@ shinyServer(function(input, output, session) {
     })
     
     output$age_male_plot <- renderPlot({
-        ggplot(data = Datalong_age[7:12,]) + 
+        ggplot(data = eval(as.name(Datalong_age()))[7:12,]) + 
             geom_col(aes(x = age_group, y = value, fill=value)) +
-            labs(title = "Number of Males per Age Group in Nashville", 
+            labs(title = paste("Number of Males per Age Group in", input$usercity), 
                  x = "Age Groups", y = "Total") +
             scale_x_discrete(labels=c("age_under_20_years" = "Under 20", "age_20_29_years" = "20 to 29",
                                       "age_30_39_years" = "30 to 39", "age_40_49_years" = "40 to 49",
@@ -658,9 +669,9 @@ shinyServer(function(input, output, session) {
     })
     
     output$age_female_plot <- renderPlot({
-        ggplot(data = Datalong_age[13:18,]) + 
+        ggplot(data = eval(as.name(Datalong_age()))[13:18,]) + 
             geom_col(aes(x = age_group, y = value, fill=value)) +
-            labs(title = "Number of Females per Age Group in Nashville", 
+            labs(title = paste("Number of Females per Age Group in", input$usercity), 
                  x = "Age Groups", y = "Total") +
             scale_x_discrete(labels=c("age_under_20_years" = "Under 20", "age_20_29_years" = "20 to 29",
                                       "age_30_39_years" = "30 to 39", "age_40_49_years" = "40 to 49",

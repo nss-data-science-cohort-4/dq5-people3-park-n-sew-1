@@ -1,24 +1,27 @@
 
-shinyUI(navbarPage(title = "People 3 Demo App", inverse = TRUE,
+shinyUI(navbarPage(title = "People 3", inverse = TRUE,
+                   
                    
                    # ********** ABOUT TAB **********
-                   tabPanel("About", 
-                            h2('Welcome to our R Shiny App!'),
-                            h4('This app is designed to compare a company\'s demographics'),
-                            h4('with the demographics of their surrounding city.'),
-                            h4('The Nashville demographic data used in this app was collected from Census ......'),
-                            h4('To get started visit the \"Upload Your Data\" Page...'),
-                            h4('Once you have your data uploaded you can use the tabs to explor the demographics in your company...'),
-                            h4('...'),
-                            h4('...')
+                   tabPanel("ABOUT", 
+                            img(src='people3_logo.png', height="60%", width="60%", align = "center"),
+                            h2('Hi, welcome to People3!'),
+                            h4('Our goal at People3 is simple–to help people navigate people differences. And we do that through providing customized and impactful diversity and inclusion training, consulting, and research services that improve the people relationships within organizations.'),
+                            h4('This app is designed to compare your company\'s demographics with the demographics of your surrounding city.'),
+                            h4('The demographic data used in this app was collected from the US Census.'),
+                            h4('To get started, visit the \"Upload Your Data\" Page.'),
+                            h4('Once you have your data uploaded you can use the tabs to explore the demographics in your company.')
                    ),
                    
                    # ********** Upload Data TAB **********
-                   tabPanel("Upload Your Data",
+                   tabPanel("UPLOAD YOUR DATA",
                             sidebarLayout(
                                 sidebarPanel(
-                                    fileInput("user_file", 
-                                              #NEED ACTION OR TEXT TO EXPLAIN HOW
+                                  selectInput("usercity",
+                                              "Where are you from?",
+                                              choices = c("Atlanta", "Boise", "Memphis", "Nashville", "Minneapolis", "Seattle"),
+                                              selected = "Nashville"),
+                                  fileInput("user_file", 
                                               "Upload your File",
                                               accept = c(".xls", ".xlsx")
                                               )
@@ -43,7 +46,7 @@ shinyUI(navbarPage(title = "People 3 Demo App", inverse = TRUE,
                    
                    
                    # ********** RACE TAB **********
-                   tabPanel("Race",
+                   tabPanel("RACE",
                             sidebarLayout(
                               sidebarPanel(
                                 plotOutput('nash_race_pie'),
@@ -69,7 +72,7 @@ shinyUI(navbarPage(title = "People 3 Demo App", inverse = TRUE,
                    
                    
                    # ********** EDUCATION TAB **********
-                   tabPanel("Education",
+                   tabPanel("EDUCATION",
                             sidebarLayout(
                               sidebarPanel(
                                 plotOutput('nash_edu_pie'),
@@ -96,7 +99,7 @@ shinyUI(navbarPage(title = "People 3 Demo App", inverse = TRUE,
                    
                    
                    # ********** AGE TAB **********
-                   tabPanel("Age",
+                   tabPanel("AGE",
                             sidebarLayout(
                               sidebarPanel(
                                 plotOutput('nash_age_pie'),
