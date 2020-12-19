@@ -7,12 +7,12 @@ library(RColorBrewer)
 options(scipen = 999)
 
 #Load in Census Data
-Nashville_census_df_list <- readRDS('../data/census_df.rds')
-Memphis_census_df_list <- readRDS('../data/memphis_census_df.rds')
-Seattle_census_df_list <- readRDS('../data/seattle_census_df.rds')
-Atlanta_census_df_list <- readRDS('../data/atlanta_census_df.rds')
-Boise_census_df_list <- readRDS('../data/boise_census_df.rds')
-Minneapolis_census_df_list <- readRDS('../data/minneapolis_census_df.rds')
+Nashville_census_df_list <- readRDS('data/census_df.rds')
+Memphis_census_df_list <- readRDS('data/memphis_census_df.rds')
+Seattle_census_df_list <- readRDS('data/seattle_census_df.rds')
+Atlanta_census_df_list <- readRDS('data/atlanta_census_df.rds')
+Boise_census_df_list <- readRDS('data/boise_census_df.rds')
+Minneapolis_census_df_list <- readRDS('data/minneapolis_census_df.rds')
 
 #Convert census data into data frames for each demographic type 
 Nashville_age_df <- data.frame(Nashville_census_df_list[1])
