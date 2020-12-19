@@ -2,22 +2,19 @@ library(shiny)
 library(tidyverse)
 library(ggplot2)
 library(shinydashboard)
-library(wesanderson)
 library(RColorBrewer)
 
 options(scipen = 999)
 
-#Load in Nashville's Data
+#Load in Census Data
 Nashville_census_df_list <- readRDS('../data/census_df.rds')
 Memphis_census_df_list <- readRDS('../data/memphis_census_df.rds')
 Seattle_census_df_list <- readRDS('../data/seattle_census_df.rds')
 Atlanta_census_df_list <- readRDS('../data/atlanta_census_df.rds')
 Boise_census_df_list <- readRDS('../data/boise_census_df.rds')
-#Chattanooga_census_df_list <- readRDS('../data/chattanooga_census_df.rds')
-#Knoxville_census_df_list <- readRDS('../data/knoxville_census_df.rds')
 Minneapolis_census_df_list <- readRDS('../data/minneapolis_census_df.rds')
 
-
+#Convert census data into data frames for each demographic type 
 Nashville_age_df <- data.frame(Nashville_census_df_list[1])
 Nashville_race_df <- data.frame(Nashville_census_df_list[2])
 Nashville_edu_df <- data.frame(Nashville_census_df_list[3])
@@ -37,14 +34,6 @@ Atlanta_edu_df <- data.frame(Atlanta_census_df_list[3])
 Boise_age_df <- data.frame(Boise_census_df_list[1])
 Boise_race_df <- data.frame(Boise_census_df_list[2])
 Boise_edu_df <- data.frame(Boise_census_df_list[3])
-
-# Chattanooga_age_df <- data.frame(Chattanooga_census_df_list[1])
-# Chattanooga_race_df <- data.frame(Chattanooga_census_df_list[2])
-# Chattanooga_edu_df <- data.frame(Chattanooga_census_df_list[3])
-# 
-# Knoxville_age_df <- data.frame(Knoxville_census_df_list[1])
-# Knoxville_race_df <- data.frame(Knoxville_census_df_list[2])
-# Knoxville_edu_df <- data.frame(Knoxville_census_df_list[3])
 
 Minneapolis_age_df <- data.frame(Minneapolis_census_df_list[1])
 Minneapolis_race_df <- data.frame(Minneapolis_census_df_list[2])
@@ -105,14 +94,6 @@ Boise_Datalong_age <- pivot_age(Boise_age_df)
 Boise_Datalong_race <- pivot_race(Boise_race_df)
 Boise_Datalong_edu <- pivot_edu(Boise_edu_df)
 
-# Chattanoooga_Datalong_age <- pivot_age(Chattanoooga_age_df)
-# Chattanoooga_Datalong_race <- pivot_race(Chattanoooga_race_df)
-# Chattanoooga_Datalong_edu <- pivot_edu(Chattanoooga_edu_df)
-# 
-# Knoxville_Datalong_age <- pivot_age(Knoxville_age_df)
-# Knoxville_Datalong_race <- pivot_race(Knoxville_race_df)
-# Knoxville_Datalong_edu <- pivot_edu(Knoxville_edu_df)
-
 Minneapolis_Datalong_age <- pivot_age(Minneapolis_age_df)
 Minneapolis_Datalong_race <- pivot_race(Minneapolis_race_df)
 Minneapolis_Datalong_edu <- pivot_edu(Minneapolis_edu_df)
@@ -121,53 +102,7 @@ Seattle_Datalong_age <- pivot_age(Seattle_age_df)
 Seattle_Datalong_race <- pivot_race(Seattle_race_df)
 Seattle_Datalong_edu <- pivot_edu(Seattle_edu_df)
 
-
-# Datalong_age <- pivot_longer(age_df, cols = age_under_20_years:age_60_years_and_over, names_to = "age_group")
-# #View(Datalong_age)
-# 
-# #setting up factors so that bar chart in right order
-# Datalong_age$age_group <- factor(Datalong_age$age_group,levels = c("age_under_20_years",
-#                                                        "age_20_29_years",
-#                                                        "age_30_39_years",
-#                                                        "age_40_49_years",
-#                                                        "age_50_59_years",
-#                                                        "age_60_years_and_over"))
-
-# #Pivot Longer on Race
-# Datalong_race <- pivot_longer(race_df, cols = white:two_or_more_races_excluding_other_and_three_or_more, names_to = "race_group")
-# #View(Datalong_race)
-# 
-# #setting up race factors so that bar chart in right order
-# Datalong_race$race_group <- factor(Datalong_race$race_group,levels = c("white",
-#                                                                        "black_or_african_american",
-#                                                                        "american_indian_or_alaska_native",
-#                                                                        "asian",
-#                                                                        "native_hawaiian_or_pacific_islander",
-#                                                                        "other_race",
-#                                                                        "two_or_more_races",
-#                                                                        "two_or_more_races_including_other",
-#                                                                        "two_or_more_races_excluding_other_and_three_or_more"))
-# 
-# #Pivot Longer on Edu
-# Datalong_edu <- pivot_longer(edu_df, cols = no_high_school_diploma:doctorate_degree, names_to = "edu_group")
-# 
-# #setting up factors so that bar chart in right order
-# Datalong_edu$edu_group <- factor(Datalong_edu$edu_group,levels = c("no_high_school_diploma",
-#                                                                    "high_school_graduate",
-#                                                                    "some_college_no_degree",
-#                                                                    "associates_degree",
-#                                                                    "bachelors_degree",
-#                                                                    "masters_degree",
-#                                                                    "doctorate_degree",
-#                                                                    "professional_degree"))
-# 
-# 
-
-
-#View(age_df)
-#View(race_df)
-#View(edu_df)
-
+#Write function to load in user files
 read_excel_allsheets <- function(filename, tibble = FALSE) {
   sheets <- readxl::excel_sheets(filename)
   x <- lapply(sheets, function(X) readxl::read_excel(filename, sheet = X))
@@ -175,10 +110,5 @@ read_excel_allsheets <- function(filename, tibble = FALSE) {
   names(x) <- sheets
   x
 }
-
-colnames(data.frame(read_excel_allsheets('../data/Example_Profile2.xlsx')[2]))
-
-#Create Color palettes
-pal <- c("#FFD5B3", "#C66F00")
 
 

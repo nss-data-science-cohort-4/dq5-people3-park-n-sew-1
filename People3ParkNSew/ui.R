@@ -50,11 +50,7 @@ shinyUI(navbarPage(title = "People 3", inverse = TRUE,
                             sidebarLayout(
                               sidebarPanel(
                                 plotOutput('nash_race_pie'),
-                                #textOutput('percent_text_race_nash'),
-                                #textOutput('percent_text_race_nash_not'),
                                 plotOutput('company_race_pie')
-                                #textOutput('percent_text_race_user'),
-                                #textOutput('percent_text_race_user_not')
                               ),
                               mainPanel(
                                 tabsetPanel(type = "tabs",
