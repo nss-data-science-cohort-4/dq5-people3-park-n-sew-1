@@ -1,5 +1,6 @@
 shinyServer(function(input, output, session) {
-    
+
+  #Create reactive elements, which will be used to create unique names for DataFrames, respective to user input for city    
   age_df <- reactive({
     paste0(input$usercity,"_age_df")
   })
@@ -20,7 +21,7 @@ shinyServer(function(input, output, session) {
   })
   
     
-    #******** MATT'S TAB ***********
+    #******** USER INPUT TAB ***********
   
     #Making a table for each user input sheet 
     output$downloadData <- downloadHandler(
@@ -38,7 +39,6 @@ shinyServer(function(input, output, session) {
     #******** RACE TAB ***********
  
     #Your City Race Pie Chart
-    #race_df <- input$usercity_race_df
     output$nash_race_pie <- renderPlot({
       pie_race_data <- data.frame(
         group=c('Not Hispanic or Latino','Hispanic or Latino'),
@@ -57,41 +57,7 @@ shinyServer(function(input, output, session) {
         labs(title = paste("Percent Hispanic or Latino in", input$usercity)) +
         theme(plot.title = element_text(hjust = 0.5, size = 14,face="bold")) +
         scale_fill_manual(values=c("#FFD5B3", "#C66F00"))
-      #theme(legend.position = "none") +
-      #geom_text(aes(label = paste(format(round(prop, 2), nsmall = 2), "%"), color = "black", size=6))
     })
-    
-    
-    #Print text for percents Your City Race Hisp
-    # output$percent_text_race_nash <- renderText({ 
-    #   pie_race_data <- data.frame(
-    #     group=c('Not Hispanic or Latino','Hispanic or Latino'),
-    #     value=c(race_df[2,2],race_df[3,2])
-    #   )
-    #   
-    #   pie_race_data <- pie_race_data %>% 
-    #     arrange(desc(group)) %>%
-    #     mutate(prop = value / sum(pie_race_data$value) *100) %>%
-    #     mutate(ypos = cumsum(prop)- 0.5*prop)
-    #   
-    #   paste("Percent Hispanic or Latino: ", format(round(pie_race_data[2,3], 2), nsmall = 2), "%")
-    # })
-    # 
-    # #Print text for percents Your City Race Not Hisp
-    # output$percent_text_race_nash_not <- renderText({ 
-    #   pie_race_data <- data.frame(
-    #     group=c('Not Hispanic or Latino','Hispanic or Latino'),
-    #     value=c(race_df[2,2],race_df[3,2])
-    #   )
-    #   
-    #   pie_race_data <- pie_race_data %>% 
-    #     arrange(desc(group)) %>%
-    #     mutate(prop = value / sum(pie_race_data$value) *100) %>%
-    #     mutate(ypos = cumsum(prop)- 0.5*prop)
-    #   
-    #   paste("Percent Not Hispanic or Latino: ", format(round(pie_race_data[1,3], 2), nsmall = 2), "%")
-    # })
-    
     
     #Company Race Pie Chart
     output$company_race_pie <- renderPlot({
@@ -108,8 +74,6 @@ shinyServer(function(input, output, session) {
         mutate(prop = value / sum(pie_race_data$value) *100) %>%
         mutate(ypos = cumsum(prop)- 0.5*prop)
       
-      #View(pie_race_data)
-      
       ggplot(pie_race_data, aes(x="", y=value, fill=group)) +
         geom_bar(stat="identity", width=1) +
         coord_polar("y", start=0) +
@@ -117,51 +81,11 @@ shinyServer(function(input, output, session) {
         labs(title = "Percent Hispanic or Latino in Your Company") +
         theme(plot.title = element_text(hjust = 0.5, size = 14,face="bold")) +
         scale_fill_manual(values=c("#FFD5B3", "#C66F00"))
-      #theme(legend.position = "none") +
-      #geom_text(aes(label = prop), color = "white", size=6)
     })
       
-    # #Print text for percents User Race Hisp
-    # output$percent_text_race_user <- renderText({ 
-    #   
-    #   user_data_race <- read_excel_allsheets(input$user_file$datapath)[2]
-    #   user_data_race <- data.frame(user_data_race)
-    #     
-    #   pie_race_data <- data.frame(
-    #     group=c('Not Hispanic or Latino','Hispanic or Latino'),
-    #     value=c(user_data_race[2,2],user_data_race[3,2])
-    #     )
-    #     
-    #   pie_race_data <- pie_race_data %>% 
-    #     arrange(desc(group)) %>%
-    #     mutate(prop = value / sum(pie_race_data$value) *100) %>%
-    #     mutate(ypos = cumsum(prop)- 0.5*prop)
-    #   
-    #   paste("Percent Hispanic or Latino: ", format(round(pie_race_data[2,3], 2), nsmall = 2), "%")
-    # })
-    # 
-    # #Print text for percents User Race Not Hisp
-    # output$percent_text_race_user_not <- renderText({ 
-    #   user_data_race <- read_excel_allsheets(input$user_file$datapath)[2]
-    #   user_data_race <- data.frame(user_data_race)
-    #     
-    #   pie_race_data <- data.frame(
-    #     group=c('Not Hispanic or Latino','Hispanic or Latino'),
-    #     value=c(user_data_race[2,2],user_data_race[3,2])
-    #   )
-    #     
-    #   pie_race_data <- pie_race_data %>% 
-    #     arrange(desc(group)) %>%
-    #     mutate(prop = value / sum(pie_race_data$value) *100) %>%
-    #     mutate(ypos = cumsum(prop)- 0.5*prop)
-    #   
-    #   paste("Percent Not Hispanic or Latino: ", format(round(pie_race_data[1,3], 2), nsmall = 2), "%")
-    # })
-    # 
-    
-    
     
     #Your City df bar charts for race
+    #Three plots - Total, Non-Hispanic or Latino, Hispanic or Latino
     output$race_total_plot <- renderPlot({
       ggplot(data = eval(as.name(Datalong_race()))[1:9,]) + 
         geom_col(aes(x = race_group, y = value, fill=value)) +
@@ -223,6 +147,7 @@ shinyServer(function(input, output, session) {
     })
     
     #Making side by side bar chart comparing age 
+    #Three plots - Total, Non-Hispanic or Latino, Hispanic or Latino
     output$user_race_total<- renderPlot({
       #making data frame
       user_data_race <- read_excel_allsheets(input$user_file$datapath)[2]
